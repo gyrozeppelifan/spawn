@@ -74,8 +74,7 @@ public class SeaLionModel extends AgeableHierarchicalModel<SeaLion> {
         this.everything.getAllParts().forEach(ModelPart::resetPose);
 
         if (entity.isInWaterOrBubble()) {
-
-            this.animate(entity.waterIdleAnimationState, SeaLionAnimation.IDLE, ageInTicks, 1.0f);
+            this.animate(entity.waterIdleAnimationState, SeaLionAnimation.IDLE, ageInTicks, 2.0f);
             this.animate(entity.floppingAnimationState, SeaLionAnimation.FLOP, ageInTicks, 1.0f);
             this.animateWalk(SeaLionAnimation.SWIM, limbSwing, limbSwingAmount, 2.5f, 100.0F);
 
