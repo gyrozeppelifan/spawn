@@ -16,8 +16,7 @@ import static net.minecraft.client.model.geom.PartNames.*;
 
 @SuppressWarnings("FieldCanBeLocal, unused")
 @Environment(EnvType.CLIENT)
-public class HerringModel<T extends Entity>
-        extends HierarchicalModel<T> {
+public class HerringModel<T extends Entity> extends HierarchicalModel<T> {
     private final ModelPart root;
     private final ModelPart body;
     private final ModelPart leftFin;

@@ -30,6 +30,10 @@ import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRe
 import net.fabricmc.fabric.api.registry.CompostingChanceRegistry;
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.fabricmc.fabric.api.registry.StrippableBlockRegistry;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
+import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.particle.GlowParticle;
 import net.minecraft.client.player.LocalPlayer;
@@ -63,6 +67,12 @@ public class SpawnVanillaIntegration {
         registerStrippables();
         registerFlammables();
         registerCompostables();
+        addResourcePacks();
+    }
+
+    public static void addResourcePacks() {
+        ModContainer modContainer = FabricLoader.getInstance().getModContainer(MOD_ID).orElseThrow(() -> new IllegalStateException("Spawn's ModContainer couldn't be found!"));
+        ResourceManagerHelper.registerBuiltinResourcePack(new ResourceLocation(MOD_ID, "remodeled_parrots"), modContainer, "Remodeled Parrots", ResourcePackActivationType.DEFAULT_ENABLED);
     }
 
     private static void registerBiomeModifications() {

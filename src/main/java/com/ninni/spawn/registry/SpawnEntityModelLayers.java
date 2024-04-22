@@ -38,6 +38,7 @@ public interface SpawnEntityModelLayers {
     ModelLayerLocation OCTOPUS_LOCKING = main("octopus_locking", OctopusModel::createLockingBodyLayer);
     ModelLayerLocation SEA_LION = main("sea_lion", SeaLionModel::createBodyLayer);
     ModelLayerLocation SEA_LION_SWIMMING = main("sea_lion_swimming", SeaLionModel::createSwimmingBodyLayer);
+    ModelLayerLocation PARROT_REMODEL = main("parrot_remodel", ParrotRemodel::createBodyLayer);
 
     private static ModelLayerLocation register(String id, String name, EntityModelLayerRegistry.TexturedModelDataProvider provider) {
         ModelLayerLocation layer = new ModelLayerLocation(new ResourceLocation(MOD_ID, id), name);

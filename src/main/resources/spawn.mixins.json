@@ -19,6 +19,8 @@
   ],
   "client": [
     "client.BlockEntityWithoutLevelRendererMixin",
+    "client.ParrotOnShoulderLayerMixin",
+    "client.ParrotRendererMixin",
     "client.PufferfishRendererMixin"
   ],
   "injectors": {
