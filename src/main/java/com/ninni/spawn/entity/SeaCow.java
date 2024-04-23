@@ -197,7 +197,7 @@ public class SeaCow extends WaterAnimal implements Shearable {
 
         player.playSound(food.getEatingSound(), 1.0f, 1.0f);
 
-        if (this.level() instanceof ServerLevel serverLevel) {
+        if (this.level() instanceof ServerLevel serverLevel && !food.isEmpty()) {
             serverLevel.sendParticles(
                     new ItemParticleOption(ParticleTypes.ITEM, food),
                     this.getHeadPos(false, 0).x,

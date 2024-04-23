@@ -46,6 +46,7 @@ public class ClamItem extends Item {
             Direction direction = blockHitResult.getDirection();
             BlockPos blockPos2 = blockPos.relative(direction);
 
+            if (!player.isCreative()) itemStack.shrink(1);
             if (level instanceof ServerLevel) {
                 this.spawn((ServerLevel)level, itemStack, blockPos2, player, useOnContext.getRotation());
                 return InteractionResult.SUCCESS;
