@@ -49,6 +49,7 @@ public class Hamster extends TamableAnimal implements InventoryCarrier, Containe
     private static final EntityDataAccessor<Byte> DATA_FLAGS_ID = SynchedEntityData.defineId(Hamster.class, EntityDataSerializers.BYTE);
     static final Predicate<ItemEntity> ALLOWED_ITEMS = itemEntity -> !itemEntity.hasPickUpDelay() && itemEntity.isAlive();
     public final SimpleContainer inventory = new SimpleContainer(12);
+    private int standingTicks;
 
     public Hamster(EntityType<? extends TamableAnimal> entityType, Level level) {
         super(entityType, level);
@@ -150,6 +151,8 @@ public class Hamster extends TamableAnimal implements InventoryCarrier, Containe
     public void tick() {
 
         if (!this.level().isClientSide) {
+            if (standingTicks > 0) standingTicks--;
+            if (standingTicks == 0 && this.isStanding()) setStanding(false);
             float amount = 0;
             for (ItemStack itemStack : this.getInventory().items) {
                 if (itemStack.isEmpty()) amount = amount - 0.1f;
@@ -370,10 +373,6 @@ public class Hamster extends TamableAnimal implements InventoryCarrier, Containe
     }
 
     class StandGoal extends Goal {
-        private double relX;
-        private double relZ;
-        private int lookTime;
-        private int looksRemaining;
 
         public StandGoal() {
             this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
@@ -383,19 +382,19 @@ public class Hamster extends TamableAnimal implements InventoryCarrier, Containe
         public boolean canUse() {
             return Hamster.this.getLastHurtByMob() == null
                     && Hamster.this.getRandom().nextFloat() < 0.02f
+                    && Hamster.this.standingTicks == 0
                     && Hamster.this.getTarget() == null
                     && Hamster.this.getNavigation().isDone() ;
         }
 
         @Override
         public boolean canContinueToUse() {
-            return this.looksRemaining > 0;
+            return Hamster.this.standingTicks > 0;
         }
 
         @Override
         public void start() {
-            this.resetLook();
-            this.looksRemaining = 2 + Hamster.this.getRandom().nextInt(3);
+            Hamster.this.standingTicks = 20 * (10 + Hamster.this.getRandom().nextInt(5));
             Hamster.this.setStanding(true);
             Hamster.this.getNavigation().stop();
         }
@@ -403,23 +402,6 @@ public class Hamster extends TamableAnimal implements InventoryCarrier, Containe
         @Override
         public void stop() {
             Hamster.this.setStanding(false);
-        }
-
-        @Override
-        public void tick() {
-            --this.lookTime;
-            if (this.lookTime <= 0) {
-                --this.looksRemaining;
-                this.resetLook();
-            }
-            Hamster.this.getLookControl().setLookAt(Hamster.this.getX() + this.relX, Hamster.this.getEyeY(), Hamster.this.getZ() + this.relZ, Hamster.this.getMaxHeadYRot(), Hamster.this.getMaxHeadXRot());
-        }
-
-        private void resetLook() {
-            double d = Math.PI * 2 * Hamster.this.getRandom().nextDouble();
-            this.relX = Math.cos(d);
-            this.relZ = Math.sin(d);
-            this.lookTime = this.adjustedTickDelay(80 + Hamster.this.getRandom().nextInt(20));
         }
     }
 }
