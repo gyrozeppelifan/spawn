@@ -642,6 +642,14 @@
 		],
 		"subtitle": "subtitles.block.generic.footsteps"
 	},
+	"music_disc.blink": {
+		"sounds": [
+			{
+				"name": "spawn:records/music_disc_blink",
+				"stream": true
+			}
+		]
+	},
 	"item.goat_horn.octopus": {
 		"sounds": [
 			"spawn:item/goat_horn/octopus1",

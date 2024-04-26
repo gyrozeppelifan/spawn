@@ -139,6 +139,8 @@
 
   "block.spawn.algal_sand": "Algal Sand",
   "block.spawn.trimmed_seagrass": "Trimmed Seagrass",
+  "item.spawn.music_disc_blink": "Music Disc",
+  "item.spawn.music_disc_blink.desc": "Ninni - blink",
 
   "entity.spawn.clam": "Clam",
   "item.spawn.clam_spawn_egg": "Clam Spawn Egg",

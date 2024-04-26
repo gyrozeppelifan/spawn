@@ -190,14 +190,7 @@ public class SeaCow extends WaterAnimal implements Shearable {
     }
 
     public void feed(ItemStack food, Player player) {
-        int amount = 0;
-
-        if (food.is(SpawnTags.SEA_COW_LIKES)) amount = 1;
-        else if (food.is(SpawnTags.SEA_COW_LOVES)) amount = 5;
-
-        player.playSound(food.getEatingSound(), 1.0f, 1.0f);
-
-        if (this.level() instanceof ServerLevel serverLevel && !food.isEmpty()) {
+        if (this.level() instanceof ServerLevel serverLevel && ((player.isCreative()) || (food.getCount() != 1 && !player.isCreative()))) {
             serverLevel.sendParticles(
                     new ItemParticleOption(ParticleTypes.ITEM, food),
                     this.getHeadPos(false, 0).x,
@@ -209,7 +202,15 @@ public class SeaCow extends WaterAnimal implements Shearable {
                     this.getBbWidth() / 4.0f,
                     0.05);
         }
-        this.addMunchingCooldown(20);
+
+        int amount = 0;
+
+        if (food.is(SpawnTags.SEA_COW_LIKES)) amount = 1;
+        else if (food.is(SpawnTags.SEA_COW_LOVES)) amount = 5;
+
+        player.playSound(food.getEatingSound(), 1.0f, 1.0f);
+
+        this.addMunchingCooldown(10);
         this.setFullness(this.getFullness() + amount);
 
         food.shrink(1);

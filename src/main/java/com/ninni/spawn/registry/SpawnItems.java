@@ -86,6 +86,7 @@ public class SpawnItems {
     public static final Item SPADE_POTTERY_SHERD = register("spade_pottery_sherd", new Item(new Item.Properties()));
 
     public static final Item ALGAL_SAND = register("algal_sand", new BlockItem(SpawnBlocks.ALGAL_SAND, new FabricItemSettings()));
+    public static final Item MUSIC_DISC_BLINK = register("music_disc_blink", new RecordItem(8, SpawnSoundEvents.MUSIC_DISC_BLINK, new Item.Properties().stacksTo(1).rarity(Rarity.RARE), 117));
 
     // clam
     public static final Item SHELL_FRAGMENTS = register("shell_fragments", new Item(new FabricItemSettings()));

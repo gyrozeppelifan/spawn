@@ -46,7 +46,7 @@ public class SpawnCreativeModeTab {
             entries.addAfter(Items.AXOLOTL_BUCKET, KRILL_SWARM_BUCKET);
             entries.addAfter(Items.MILK_BUCKET, CAPTURED_OCTOPUS, CLAM, ANT_PUPA);
             entries.addAfter(Items.FISHING_ROD, CLAM_CASE);
-            entries.addAfter(Items.MUSIC_DISC_RELIC, MUSIC_DISC_ROT);
+            entries.addAfter(Items.MUSIC_DISC_RELIC, MUSIC_DISC_ROT, MUSIC_DISC_BLINK);
         });
 
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.REDSTONE_BLOCKS).register(entries -> {
@@ -176,6 +176,7 @@ public class SpawnCreativeModeTab {
 
         //Seagrass meadows
                 output.accept(ALGAL_SAND);
+                output.accept(MUSIC_DISC_BLINK);
 
                 // sea cow
                 output.accept(SEA_COW_SPAWN_EGG);

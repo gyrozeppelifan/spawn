@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "spawn:music_disc_rot"
+    "spawn:music_disc_rot",
+    "spawn:music_disc_blink"
   ]
 }
