@@ -86,7 +86,7 @@ public class SpawnItems {
     public static final Item SPADE_POTTERY_SHERD = register("spade_pottery_sherd", new Item(new Item.Properties()));
 
     public static final Item ALGAL_SAND = register("algal_sand", new BlockItem(SpawnBlocks.ALGAL_SAND, new FabricItemSettings()));
-    public static final Item MUSIC_DISC_BLINK = register("music_disc_blink", new RecordItem(8, SpawnSoundEvents.MUSIC_DISC_BLINK, new Item.Properties().stacksTo(1).rarity(Rarity.RARE), 117));
+    public static final Item MUSIC_DISC_BLINK = register("music_disc_blink", new RecordItem(8, SpawnSoundEvents.MUSIC_DISC_BLINK, new Item.Properties().stacksTo(1).rarity(Rarity.RARE), 133));
 
     // clam
     public static final Item SHELL_FRAGMENTS = register("shell_fragments", new Item(new FabricItemSettings()));
@@ -106,11 +106,11 @@ public class SpawnItems {
     public static final Item SHELL_POTTERY_SHERD = register("shell_pottery_sherd", new Item(new Item.Properties()));
 
     // octopus
-    //public static final Item OCTOPUS_SPAWN_EGG = register("octopus_spawn_egg", new SpawnEggItem(SpawnEntityType.OCTOPUS, 0xB51C65, 0xFFBE2B, new Item.Properties()));
+    public static final Item OCTOPUS_SPAWN_EGG = register("octopus_spawn_egg", new SpawnEggItem(SpawnEntityType.OCTOPUS, 0xB51C65, 0xFFBE2B, new Item.Properties()));
     public static final Item CAPTURED_OCTOPUS = register("captured_octopus", new CapturedOctopusItem(new Item.Properties().stacksTo(1)));
 
     // sea lion
-    //public static final Item SEA_LION_SPAWN_EGG = register("sea_lion_spawn_egg", new SpawnEggItem(SpawnEntityType.SEA_LION, 0x5E4834, 0xC08650, new Item.Properties()));
+    public static final Item SEA_LION_SPAWN_EGG = register("sea_lion_spawn_egg", new SpawnEggItem(SpawnEntityType.SEA_LION, 0x5E4834, 0xC08650, new Item.Properties()));
 
     // herring
     public static final Item HERRING_SPAWN_EGG = register("herring_spawn_egg", new SpawnEggItem(SpawnEntityType.HERRING, 0x1051AD, 0xCACACA, new Item.Properties()));

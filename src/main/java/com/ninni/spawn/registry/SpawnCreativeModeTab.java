@@ -100,7 +100,8 @@ public class SpawnCreativeModeTab {
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.SPAWN_EGGS).register(entries -> {
             entries.addAfter(Items.ALLAY_SPAWN_EGG, ANGLER_FISH_SPAWN_EGG, ANT_SPAWN_EGG);
             entries.addAfter(Items.CHICKEN, CLAM_SPAWN_EGG);
-            entries.addAfter(Items.SALMON_SPAWN_EGG, SEA_COW_SPAWN_EGG, SEAHORSE_SPAWN_EGG);
+            entries.addAfter(Items.OCELOT_SPAWN_EGG, OCTOPUS_SPAWN_EGG);
+            entries.addAfter(Items.SALMON_SPAWN_EGG, SEA_COW_SPAWN_EGG, SEAHORSE_SPAWN_EGG, SEA_LION_SPAWN_EGG);
             entries.addAfter(Items.SLIME_SPAWN_EGG, SNAIL_SPAWN_EGG);
             entries.addAfter(Items.TROPICAL_FISH_SPAWN_EGG, TUNA_SPAWN_EGG);
             entries.addAfter(Items.IRON_GOLEM_SPAWN_EGG, KRILL_SWARM_SPAWN_EGG);
@@ -201,11 +202,11 @@ public class SpawnCreativeModeTab {
                 output.accept(COOKED_HERRING);
 
                 // octopus
-                //output.accept(OCTOPUS_SPAWN_EGG);
+                output.accept(OCTOPUS_SPAWN_EGG);
                 output.accept(CAPTURED_OCTOPUS);
 
                 // sea lion
-                //output.accept(SEA_LION_SPAWN_EGG);
+                output.accept(SEA_LION_SPAWN_EGG);
 
                 // whale
                 output.accept(WHALE_SPAWN_EGG);
