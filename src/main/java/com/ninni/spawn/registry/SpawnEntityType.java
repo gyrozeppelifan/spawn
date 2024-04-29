@@ -170,6 +170,15 @@ public class SpawnEntityType {
 
     );
 
+    public static final EntityType<Sunfish> SUNFISH = register(
+            "sunfish",
+            FabricEntityTypeBuilder.createMob()
+                    .entityFactory(Sunfish::new)
+                    .defaultAttributes(Sunfish::createAttributes)
+                    .spawnGroup(MobCategory.WATER_CREATURE)
+                    .spawnRestriction(SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Sunfish::checkSurfaceWaterAnimalSpawnRules)
+                    .dimensions(EntityDimensions.scalable(0.8F, 2F))
+    );
 
     static {
         BiomeModifications.addSpawn(BiomeSelectors.tag(SpawnTags.CLAM_SPAWNS), MobCategory.WATER_AMBIENT, SpawnEntityType.CLAM, 150, 4, 12);

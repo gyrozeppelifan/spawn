@@ -173,6 +173,17 @@ public class SpawnVanillaIntegration {
 
         private static void registerItemModelPredicates() {
 
+            ItemProperties.register(SpawnItems.BABY_SUNFISH_BUCKET, new ResourceLocation("age"), (itemStack, clientLevel, livingEntity, i) -> {
+                CompoundTag compoundTag = itemStack.getTag();
+                if (compoundTag != null && compoundTag.contains("Age", 3)) {
+                    int a = compoundTag.getInt("Age");
+
+                    if (a < -12000) return 0.25f;
+                    else return 0.5f;
+                }
+                return 0.0F;
+            });
+
             ItemProperties.register(SpawnItems.CLAM_CASE, new ResourceLocation("filled"), (itemStack, clientLevel, livingEntity, i) -> ClamCaseItem.getFullnessDisplay(itemStack));
 
             ItemProperties.register(SpawnItems.CLAM, new ResourceLocation("variant"), (itemStack, clientLevel, livingEntity, i) -> {
@@ -218,6 +229,7 @@ public class SpawnVanillaIntegration {
             EntityRendererRegistry.register(SpawnEntityType.CLAM, ClamRenderer::new);
             EntityRendererRegistry.register(SpawnEntityType.OCTOPUS, OctopusRenderer::new);
             EntityRendererRegistry.register(SpawnEntityType.SEA_LION, SeaLionRenderer::new);
+            EntityRendererRegistry.register(SpawnEntityType.SUNFISH, SunfishRenderer::new);
 
             BlockEntityRenderers.register(SpawnBlockEntityTypes.WHALE_UVULA, WhaleUvulaRenderer::new);
             BlockEntityRenderers.register(SpawnBlockEntityTypes.PIGMENT_SHIFTER, PigmentShifterRenderer::new);

@@ -112,6 +112,10 @@ public class SpawnItems {
     // sea lion
     public static final Item SEA_LION_SPAWN_EGG = register("sea_lion_spawn_egg", new SpawnEggItem(SpawnEntityType.SEA_LION, 0x5E4834, 0xC08650, new Item.Properties()));
 
+    // sunfish
+    public static final Item SUNFISH_SPAWN_EGG = register("sunfish_spawn_egg", new SpawnEggItem(SpawnEntityType.SUNFISH, 0x576276, 0x91A6BE, new Item.Properties()));
+    public static final Item BABY_SUNFISH_BUCKET = register("baby_sunfish_bucket", new MobBucketItem(SpawnEntityType.SUNFISH, Fluids.WATER, SoundEvents.BUCKET_EMPTY_FISH, new Item.Properties().stacksTo(1)));
+
     // herring
     public static final Item HERRING_SPAWN_EGG = register("herring_spawn_egg", new SpawnEggItem(SpawnEntityType.HERRING, 0x1051AD, 0xCACACA, new Item.Properties()));
     public static final Item HERRING_BUCKET = register("herring_bucket", new MobBucketItem(SpawnEntityType.HERRING, Fluids.WATER, SoundEvents.BUCKET_EMPTY_FISH, new Item.Properties().stacksTo(1)));

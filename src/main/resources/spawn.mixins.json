@@ -13,10 +13,10 @@
     "MinecraftServerMixin",
     "MobBucketItemMixin",
     "OverworldBiomeBuilderMixin",
-    "accessor.PlayerAccessor",
     "PlayerMixin",
     "ServerPlayerMixin",
     "accessor.NoiseGeneratorSettingsAccessor",
+    "accessor.PlayerAccessor",
     "accessor.TropicalFishAccessor"
   ],
   "client": [

@@ -39,6 +39,9 @@ public interface SpawnEntityModelLayers {
     ModelLayerLocation SEA_LION = main("sea_lion", SeaLionModel::createBodyLayer);
     ModelLayerLocation SEA_LION_SWIMMING = main("sea_lion_swimming", SeaLionModel::createSwimmingBodyLayer);
     ModelLayerLocation PARROT_REMODEL = main("parrot_remodel", ParrotRemodel::createBodyLayer);
+    ModelLayerLocation SUNFISH = main("sunfish", SunfishModel::createBodyLayer);
+    ModelLayerLocation SUNFISH_BABY = main("sunfish_baby", SunfishModel::createBabyBodyLayer);
+    ModelLayerLocation SUNFISH_NEWBORN = main("sunfish_newborn", SunfishModel::createNewbornBodyLayer);
 
     private static ModelLayerLocation register(String id, String name, EntityModelLayerRegistry.TexturedModelDataProvider provider) {
         ModelLayerLocation layer = new ModelLayerLocation(new ResourceLocation(MOD_ID, id), name);

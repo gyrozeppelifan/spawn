@@ -1,0 +1,20 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "spawn:item/baby_sunfish_bucket"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "variant": 0.25
+      },
+      "model": "spawn:item/baby_sunfish_bucket_baby"
+    },
+    {
+      "predicate": {
+        "variant": 0.5
+      },
+      "model": "spawn:item/baby_sunfish_bucket_newborn"
+    }
+  ]
+}

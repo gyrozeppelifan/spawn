@@ -31,6 +31,8 @@ public interface SpawnTags {
     TagKey<Item> ADDITIONAL_CLAM_CASE_ITEMS = TagKey.create(Registries.ITEM, new ResourceLocation(MOD_ID, "additional_clam_case_items"));
     TagKey<Item> CLAM_CASE_BLACKLIST = TagKey.create(Registries.ITEM, new ResourceLocation(MOD_ID, "clam_case_blacklist"));
     TagKey<Item> PIGMENT_SHIFTER_BASE = TagKey.create(Registries.ITEM, new ResourceLocation(MOD_ID, "pigment_shifter_base"));
+    TagKey<Item> SUNFISH_TEMPTS = TagKey.create(Registries.ITEM, new ResourceLocation(MOD_ID, "sunfish_tempts"));
+    TagKey<Item> SUNFISH_FEEDS = TagKey.create(Registries.ITEM, new ResourceLocation(MOD_ID, "sunfish_feeds"));
 
     //Block tags
     TagKey<Block> MUCUS_SOLIDIFIER = TagKey.create(Registries.BLOCK, new ResourceLocation(MOD_ID, "mucus_solidifier"));
