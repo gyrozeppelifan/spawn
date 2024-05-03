@@ -107,7 +107,7 @@ public class PigmentShifterScreen extends AbstractContainerScreen<PigmentShifter
 
                 if (item.is(SpawnItems.SEAHORSE_BUCKET)) {
                     int h;
-                    Seahorse seahorse = SpawnEntityType.SEAHORSE.create(this.level);
+                    Seahorse seahorse = SpawnEntityType.SpawnFish.SEAHORSE.create(this.level);
                     Seahorse.Pattern pattern = this.optional.isPresent() ? this.optional.get() : Seahorse.getPattern(tag);
                     Seahorse.Variant variant = new Seahorse.Variant(pattern, Seahorse.getBaseColor(tag), Seahorse.getPatternColor(tag));
                     seahorse.setPackedVariant(variant.getPackedId());

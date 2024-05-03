@@ -40,7 +40,7 @@ public class AnthillFeature extends Feature<AnthillConfig> {
                 int i = 1 + randomSource.nextInt(3);
                 for (int j = 0; j < i; ++j) {
                     CompoundTag compoundTag = new CompoundTag();
-                    compoundTag.putString("id", BuiltInRegistries.ENTITY_TYPE.getKey(SpawnEntityType.ANT).toString());
+                    compoundTag.putString("id", BuiltInRegistries.ENTITY_TYPE.getKey(SpawnEntityType.SpawnLandCreature.ANT).toString());
                     anthillBlockEntity.storeAnt(compoundTag, randomSource.nextInt(599), false);
                 }
             });

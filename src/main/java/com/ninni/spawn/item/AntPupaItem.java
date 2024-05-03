@@ -44,12 +44,12 @@ public class AntPupaItem extends Item {
         BlockPos blockPos = blockPlaceContext.getClickedPos();
         ItemStack itemStack = useOnContext.getItemInHand();
         Vec3 vec3 = Vec3.atBottomCenterOf(blockPos);
-        AABB aABB = SpawnEntityType.ANT.getDimensions().makeBoundingBox(vec3.x(), vec3.y(), vec3.z());
+        AABB aABB = SpawnEntityType.SpawnLandCreature.ANT.getDimensions().makeBoundingBox(vec3.x(), vec3.y(), vec3.z());
         if (!level.noCollision(null, aABB) || !level.getEntities(null, aABB).isEmpty()) return InteractionResult.FAIL;
 
         if (level instanceof ServerLevel serverLevel) {
             Consumer consumer = EntityType.createDefaultStackConfig(serverLevel, itemStack, useOnContext.getPlayer());
-            Ant ant = SpawnEntityType.ANT.create(serverLevel, itemStack.getTag(), consumer, blockPos, MobSpawnType.SPAWN_EGG, true, true);
+            Ant ant = SpawnEntityType.SpawnLandCreature.ANT.create(serverLevel, itemStack.getTag(), consumer, blockPos, MobSpawnType.SPAWN_EGG, true, true);
             if (ant == null) return InteractionResult.FAIL;
 
             ant.setTame(true);

@@ -357,7 +357,7 @@ public class Hamster extends TamableAnimal implements InventoryCarrier, Containe
     @Override
     @Nullable
     public Hamster getBreedOffspring(ServerLevel serverLevel, AgeableMob ageableMob) {
-        Hamster hamster = SpawnEntityType.HAMSTER.create(serverLevel);
+        Hamster hamster = SpawnEntityType.SpawnLandCreature.HAMSTER.create(serverLevel);
         if (hamster != null && ageableMob instanceof Hamster hamster2) {
             if (this.random.nextBoolean()) {
                 hamster.setVariant(this.getVariant());
