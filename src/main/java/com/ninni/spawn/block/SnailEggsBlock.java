@@ -51,7 +51,7 @@ public class SnailEggsBlock extends MultifaceBlock {
     private void spawnSnails(ServerLevel world, BlockPos pos, RandomSource random) {
         int i = random.nextInt(2, 4);
         for (int j = 1; j <= i; ++j) {
-            Snail snail = SpawnEntityType.SNAIL.create(world);
+            Snail snail = SpawnEntityType.SpawnLandCreature.SNAIL.create(world);
             assert snail != null;
             double d = (double)pos.getX() + this.getSpawnOffset(random);
             double e = (double)pos.getZ() + this.getSpawnOffset(random);

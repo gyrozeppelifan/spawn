@@ -162,7 +162,7 @@ public class TunaEgg extends Mob implements Bucketable {
     }
 
     public void hatch(ServerLevel level) {
-        Tuna tuna = SpawnEntityType.TUNA.create(level);
+        Tuna tuna = SpawnEntityType.SpawnFish.TUNA.create(level);
         assert tuna != null;
         tuna.setBaby(true);
         tuna.setPersistenceRequired();

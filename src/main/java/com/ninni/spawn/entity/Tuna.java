@@ -81,7 +81,7 @@ public class Tuna extends Animal {
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel serverLevel, AgeableMob ageableMob) {
-        return SpawnEntityType.TUNA.create(serverLevel);
+        return SpawnEntityType.SpawnFish.TUNA.create(serverLevel);
     }
 
     @Override
@@ -233,7 +233,7 @@ public class Tuna extends Animal {
 
 
     public void spawnChildFromBreeding(ServerLevel serverLevel, Animal animal) {
-        TunaEgg egg = SpawnEntityType.TUNA_EGG.create(serverLevel);
+        TunaEgg egg = SpawnEntityType.SpawnFish.TUNA_EGG.create(serverLevel);
         if (egg == null) return;
         ServerPlayer serverPlayer = this.getLoveCause();
         if (serverPlayer == null && animal.getLoveCause() != null) serverPlayer = animal.getLoveCause();

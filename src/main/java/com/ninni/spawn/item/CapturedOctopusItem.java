@@ -77,7 +77,7 @@ public class CapturedOctopusItem extends Item {
             if (level.getBlockEntity(pos) instanceof ChestBlockEntity blockEntity && (state.getValue(ChestBlock.TYPE) == ChestType.SINGLE)) {
                 List<Octopus> list = level.getEntitiesOfClass(Octopus.class, new AABB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1));
                 if (list.isEmpty()) {
-                    Octopus entity = SpawnEntityType.OCTOPUS.spawn(serverLevel, itemStack, null, pos.below(), MobSpawnType.BUCKET, true, false);
+                    Octopus entity = SpawnEntityType.SpawnCephalopod.OCTOPUS.spawn(serverLevel, itemStack, null, pos.below(), MobSpawnType.BUCKET, true, false);
 
                     entity.setLockingPos(pos);
                     entity.setOwnerUUID(player.getUUID());
@@ -91,7 +91,7 @@ public class CapturedOctopusItem extends Item {
 
 
             } else {
-                Octopus entity = SpawnEntityType.OCTOPUS.spawn(serverLevel, itemStack, null, blockPos, MobSpawnType.BUCKET, true, false);
+                Octopus entity = SpawnEntityType.SpawnCephalopod.OCTOPUS.spawn(serverLevel, itemStack, null, blockPos, MobSpawnType.BUCKET, true, false);
                 entity.loadDataFromItem(itemStack.getOrCreateTag());
                 entity.setFromBucket(true);
 

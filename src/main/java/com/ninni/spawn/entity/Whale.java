@@ -128,7 +128,7 @@ public class Whale extends Animal {
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel serverLevel, AgeableMob ageableMob) {
-        return SpawnEntityType.WHALE.create(serverLevel);
+        return SpawnEntityType.SpawnAquaticCreature.WHALE.create(serverLevel);
     }
 
     @SuppressWarnings("unused, deprecation")

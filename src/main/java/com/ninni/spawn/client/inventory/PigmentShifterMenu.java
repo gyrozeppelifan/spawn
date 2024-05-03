@@ -141,7 +141,7 @@ public class PigmentShifterMenu extends AbstractContainerMenu {
 
                         Seahorse.Pattern pattern = this.optional.isPresent() ? this.optional.get() : Seahorse.getPattern(tag);
                         Seahorse.Variant variant = new Seahorse.Variant(pattern, bodyColor, patternColor);
-                        Seahorse seahorse = SpawnEntityType.SEAHORSE.create(this.level);
+                        Seahorse seahorse = SpawnEntityType.SpawnFish.SEAHORSE.create(this.level);
                         seahorse.setPackedVariant(variant.getPackedId());
                         resultCopy.getOrCreateTag().putInt("BucketVariantTag", seahorse.getPackedVariant());
                         seahorse.discard();

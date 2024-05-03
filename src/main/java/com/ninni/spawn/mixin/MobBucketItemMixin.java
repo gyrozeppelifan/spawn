@@ -30,7 +30,7 @@ public abstract class MobBucketItemMixin extends BucketItem {
 
     @Inject(method = "appendHoverText", at = @At("HEAD"))
     public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> list, TooltipFlag tooltipFlag, CallbackInfo ci) {
-        if (this.type == SpawnEntityType.SEAHORSE) {
+        if (this.type == SpawnEntityType.SpawnFish.SEAHORSE) {
             CompoundTag compoundTag = itemStack.getTag();
             if (compoundTag != null && compoundTag.contains("BucketVariantTag", 3)) {
                 int i = compoundTag.getInt("BucketVariantTag");

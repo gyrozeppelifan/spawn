@@ -61,10 +61,10 @@ public class ClamItem extends Item {
         Clam entity;
         CompoundTag compoundTag = itemStack.getTag();
         if (compoundTag != null && compoundTag.contains("ItemVariantTag", 3)) {
-            entity = SpawnEntityType.CLAM.spawn(serverLevel, itemStack, null, blockPos, MobSpawnType.MOB_SUMMONED, true, false);
+            entity = SpawnEntityType.SpawnAquaticCreature.CLAM.spawn(serverLevel, itemStack, null, blockPos, MobSpawnType.MOB_SUMMONED, true, false);
             Clam.loadFromBucketTag(entity, itemStack.getOrCreateTag());
         } else {
-            entity = SpawnEntityType.CLAM.spawn(serverLevel, itemStack, null, blockPos, MobSpawnType.SPAWN_EGG, true, false);
+            entity = SpawnEntityType.SpawnAquaticCreature.CLAM.spawn(serverLevel, itemStack, null, blockPos, MobSpawnType.SPAWN_EGG, true, false);
         }
         float f = (float)Mth.floor((Mth.wrapDegrees(rotation - 180.0f) + 22.5f) / 45.0f) * 45.0f;
         entity.moveTo(entity.getX(), entity.getY(), entity.getZ(), f, 0.0f);
