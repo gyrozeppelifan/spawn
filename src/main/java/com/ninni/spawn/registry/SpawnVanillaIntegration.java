@@ -170,7 +170,7 @@ public class SpawnVanillaIntegration {
                 if (compoundTag != null && compoundTag.contains("Age", 3)) {
                     int a = compoundTag.getInt("Age");
 
-                    if (a < -12000) return 0f;
+                    if (a < -24000) return 0f;
                     else return 1f;
                 }
                 return 1f;

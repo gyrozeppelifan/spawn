@@ -80,7 +80,7 @@ public class Sunfish extends PathfinderMob implements Bucketable, VariantHolder<
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 30.0).add(Attributes.MOVEMENT_SPEED, 0.8f);
+        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 6.0).add(Attributes.MOVEMENT_SPEED, 0.8f);
     }
 
     @Override
@@ -105,10 +105,22 @@ public class Sunfish extends PathfinderMob implements Bucketable, VariantHolder<
     protected InteractionResult mobInteract(Player player, InteractionHand interactionHand) {
         ItemStack itemStack = player.getItemInHand(interactionHand);
 
+        //Make them spawn babies via spawn egg like other animal mobs
+        if (itemStack.is(SpawnItems.SUNFISH_SPAWN_EGG) && this.level() instanceof ServerLevel serverLevel) {
+            if (!player.getAbilities().instabuild) itemStack.shrink(1);
+            Sunfish baby = SpawnEntityType.SpawnFish.SUNFISH.create(this.level());
+            baby.setAge(-48000);
+            baby.moveTo(this.getX(), this.getY(), this.getZ(), 0.0f, 0.0f);
+            serverLevel.addFreshEntityWithPassengers(baby);
+            return InteractionResult.SUCCESS;
+        }
+
+        //Bucketing
         if (this.isBaby() && Bucketable.bucketMobPickup(player, interactionHand, this).isPresent()) {
             return InteractionResult.sidedSuccess(this.level().isClientSide);
         }
 
+        //Feeding for breeding and making them grow up faster
         if (itemStack.is(SpawnTags.SUNFISH_FEEDS)) {
             int i = this.getAge();
             if (!this.level().isClientSide && i == 0 && this.canFallInLove()) {
@@ -132,22 +144,23 @@ public class Sunfish extends PathfinderMob implements Bucketable, VariantHolder<
     //region Love and Breeding
 
 
-    public void spawnChildFromBreeding(ServerLevel serverLevel, Sunfish sunfish) {
+    public void spawnChildFromBreeding(ServerLevel serverLevel, Sunfish partner) {
         Sunfish baby = SpawnEntityType.SpawnFish.SUNFISH.create(serverLevel);
         if (baby == null) return;
         ServerPlayer serverPlayer = this.getLoveCause();
-        if (serverPlayer == null && sunfish.getLoveCause() != null) serverPlayer = sunfish.getLoveCause();
+        if (serverPlayer == null && partner.getLoveCause() != null) serverPlayer = partner.getLoveCause();
         if (serverPlayer != null) {
             serverPlayer.awardStat(Stats.ANIMALS_BRED);
             SpawnCriteriaTriggers.BREED_SUNFISH.trigger(serverPlayer);
         }
         this.setAge(6000);
-        sunfish.setAge(6000);
+        partner.setAge(6000);
         this.resetLove();
-        sunfish.resetLove();
+        partner.resetLove();
 
+        baby.setVariant(this.level().random.nextFloat() > 0.5f ? this.getVariant() : partner.getVariant());
         baby.setPersistenceRequired();
-        baby.setAge(-24000);
+        baby.setAge(-48000);
         baby.moveTo(this.getX(), this.getY(), this.getZ(), 0.0f, 0.0f);
         serverLevel.addFreshEntity(baby);
         serverLevel.broadcastEntityEvent(this, (byte)18);
@@ -167,9 +180,7 @@ public class Sunfish extends PathfinderMob implements Bucketable, VariantHolder<
     @Override
     public void aiStep() {
         super.aiStep();
-        if (this.getAge() != 0) {
-            this.inLove = 0;
-        }
+        if (this.getAge() != 0) this.inLove = 0;
         if (this.inLove > 0) {
             --this.inLove;
             if (this.inLove % 10 == 0) {
@@ -183,9 +194,7 @@ public class Sunfish extends PathfinderMob implements Bucketable, VariantHolder<
 
     @Override
     public boolean hurt(DamageSource damageSource, float f) {
-        if (this.isInvulnerableTo(damageSource)) {
-            return false;
-        }
+        if (this.isInvulnerableTo(damageSource)) return false;
         this.inLove = 0;
         return super.hurt(damageSource, f);
     }
@@ -196,21 +205,15 @@ public class Sunfish extends PathfinderMob implements Bucketable, VariantHolder<
 
     public void setInLove(@Nullable Player player) {
         this.inLove = 600;
-        if (player != null) {
-            this.loveCause = player.getUUID();
-        }
+        if (player != null) this.loveCause = player.getUUID();
         this.level().broadcastEntityEvent(this, (byte)18);
     }
 
     @Nullable
     public ServerPlayer getLoveCause() {
-        if (this.loveCause == null) {
-            return null;
-        }
+        if (this.loveCause == null) return null;
         Player player = this.level().getPlayerByUUID(this.loveCause);
-        if (player instanceof ServerPlayer) {
-            return (ServerPlayer)player;
-        }
+        if (player instanceof ServerPlayer) return (ServerPlayer)player;
         return null;
     }
 
@@ -236,9 +239,7 @@ public class Sunfish extends PathfinderMob implements Bucketable, VariantHolder<
                 double f = this.random.nextGaussian() * 0.02;
                 this.level().addParticle(ParticleTypes.HEART, this.getRandomX(1.0), this.getRandomY() + 0.5, this.getRandomZ(1.0), d, e, f);
             }
-        } else {
-            super.handleEntityEvent(b);
-        }
+        } else super.handleEntityEvent(b);
     }
 
     public static class BreedGoal extends Goal {
@@ -265,9 +266,7 @@ public class Sunfish extends PathfinderMob implements Bucketable, VariantHolder<
 
         @Override
         public boolean canUse() {
-            if (!this.sunfish.isInLove()) {
-                return false;
-            }
+            if (!this.sunfish.isInLove()) return false;
             this.partner = this.getFreePartner();
             return this.partner != null;
         }
@@ -322,6 +321,23 @@ public class Sunfish extends PathfinderMob implements Bucketable, VariantHolder<
         super.tick();
 
         if (this.tickCount % 10 == 0) {
+
+            System.out.println("hp" + this.getHealth());
+            System.out.println("max hp" + this.getMaxHealth());
+            int i = this.getSunfishAge();
+            if (i == -2 && this.getAttribute(Attributes.MAX_HEALTH).getBaseValue() != 6) {
+                this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(6.0);
+                this.setHealth(6.0f);
+            }
+            if (i == -1 && this.getAttribute(Attributes.MAX_HEALTH).getBaseValue() != 12) {
+                this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(12.0);
+                this.setHealth(6.0f);
+            }
+            if (i == 0 && this.getAttribute(Attributes.MAX_HEALTH).getBaseValue() != 30) {
+                this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(30.0);
+                this.setHealth(30.0f);
+            }
+
             if (!this.isBaby()) {
                 if (!this.isInWaterOrBubble()) {
                     if (this.getPose() != Pose.STANDING) this.setPose(Pose.STANDING);
@@ -329,7 +345,7 @@ public class Sunfish extends PathfinderMob implements Bucketable, VariantHolder<
                     if (this.getPose() != Pose.SWIMMING) this.setPose(Pose.SWIMMING);
                 }
             } else {
-                SpawnPose pose = this.getSunfishAge() == -2 ? SpawnPose.NEWBORN : SpawnPose.BABY;
+                SpawnPose pose = i == -2 ? SpawnPose.NEWBORN : SpawnPose.BABY;
                 if (this.getPose() != pose.get()) this.setPose(pose.get());
             }
 
@@ -379,7 +395,7 @@ public class Sunfish extends PathfinderMob implements Bucketable, VariantHolder<
     }
 
     public int getSunfishAge() {
-        if (this.isBaby()) return this.getAge() < -12000 ? -2 : -1;
+        if (this.isBaby()) return this.getAge() < -24000 ? -2 : -1;
         return 0;
     }
 

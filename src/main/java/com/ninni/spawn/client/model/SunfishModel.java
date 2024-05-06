@@ -46,8 +46,8 @@ public class SunfishModel extends HierarchicalModel<Sunfish> {
             this.all.yRot = 0;
             this.all.zRot = 0;
             this.tailFin.yRot = 0;
-            this.leftFin.yRot = 0;
-            this.rightFin.yRot = 0;
+            this.leftFin.yRot = 0.8F;
+            this.rightFin.yRot = -0.8F;
             this.topFin.zRot = 0;
             this.bottomFin.zRot = 0;
 
