@@ -34,7 +34,7 @@ public abstract class ParrotRendererMixin extends MobRenderer<Parrot, ParrotMode
 
     @Override
     public void render(Parrot mob, float f, float g, PoseStack poseStack, MultiBufferSource multiBufferSource, int i) {
-        if (Minecraft.getInstance().getResourceManager().getResource(new ResourceLocation("textures/entity/parrot/remodel_enabler.txt")).isPresent()) this.model = this.remodel;
+        if (Minecraft.getInstance().getResourceManager().getResource(new ResourceLocation("tweaks/parrot_remodel.txt")).isPresent()) this.model = this.remodel;
         super.render(mob, f, g, poseStack, multiBufferSource, i);
     }
 }

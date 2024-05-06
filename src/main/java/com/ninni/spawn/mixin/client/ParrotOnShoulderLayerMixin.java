@@ -41,6 +41,6 @@ public abstract class ParrotOnShoulderLayerMixin<T extends Player> extends Rende
 
     @Inject(method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/player/Player;FFFFZ)V", at = @At("HEAD"), cancellable = true)
     private void S$render(PoseStack poseStack, MultiBufferSource multiBufferSource, int i, T player, float f, float g, float h, float j, boolean bl, CallbackInfo ci) {
-        if (Minecraft.getInstance().getResourceManager().getResource(new ResourceLocation("textures/entity/parrot/remodel_enabler.txt")).isPresent()) this.model = this.remodel;
+        if (Minecraft.getInstance().getResourceManager().getResource(new ResourceLocation("tweaks/parrot_remodel.txt")).isPresent()) this.model = this.remodel;
     }
 }

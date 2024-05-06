@@ -24,7 +24,8 @@
     "client.BlockEntityWithoutLevelRendererMixin",
     "client.ParrotOnShoulderLayerMixin",
     "client.ParrotRendererMixin",
-    "client.PufferfishRendererMixin"
+    "client.PufferfishRendererMixin",
+    "client.TurtleModelMixin"
   ],
   "injectors": {
     "defaultRequire": 1

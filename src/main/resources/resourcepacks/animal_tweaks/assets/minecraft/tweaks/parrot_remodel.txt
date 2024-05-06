@@ -1,0 +1,1 @@
+Include this file in your resource pack to enable a new parrot model and animations if Spawn is installed.

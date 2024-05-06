@@ -60,7 +60,7 @@ public class SunfishModel extends HierarchicalModel<Sunfish> {
         } else {
             if (!entity.isInWaterOrBubble()) this.all.zRot = pi/2;
             else this.all.zRot = 0;
-            this.all.y = Mth.cos(animationProgress * 0.2F) * 1.5F * 0.25F + (entity.getSunfishAge() == -2 ? 22.5F : 19.0F);
+            this.all.y = Mth.sin(animationProgress * 0.2F) * 1.5F * 0.5F + (entity.getSunfishAge() == -2 ? 22.5F : 19.0F);
             this.all.yRot = Mth.cos(animationProgress * 0.2F) * 0.4F * 0.25F;
             this.tailFin.yRot = Mth.cos(animationProgress * 0.4F) * 0.8F * 0.25F;
             this.leftFin.yRot = Mth.cos(animationProgress * 0.4F) * 0.8F * 0.25F + 0.8F;
