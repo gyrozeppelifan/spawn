@@ -171,10 +171,10 @@ public class SpawnVanillaIntegration {
                 if (compoundTag != null && compoundTag.contains("Age", 3)) {
                     int a = compoundTag.getInt("Age");
 
-                    if (a < -12000) return 0.25f;
-                    else return 0.5f;
+                    if (a < -12000) return 0f;
+                    else return 1f;
                 }
-                return 0.0F;
+                return 1f;
             });
 
             ItemProperties.register(SpawnItems.CLAM_CASE, new ResourceLocation("filled"), (itemStack, clientLevel, livingEntity, i) -> ClamCaseItem.getFullnessDisplay(itemStack));

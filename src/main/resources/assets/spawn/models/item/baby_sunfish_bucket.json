@@ -6,15 +6,15 @@
   "overrides": [
     {
       "predicate": {
-        "variant": 0.25
+        "age": 0
       },
-      "model": "spawn:item/baby_sunfish_bucket_baby"
+      "model": "spawn:item/baby_sunfish_bucket_newborn"
     },
     {
       "predicate": {
-        "variant": 0.5
+        "age": 1
       },
-      "model": "spawn:item/baby_sunfish_bucket_newborn"
+      "model": "spawn:item/baby_sunfish_bucket_baby"
     }
   ]
 }

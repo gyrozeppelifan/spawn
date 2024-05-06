@@ -38,7 +38,7 @@ public class Herring extends BoidFishEntity {
 
     @Override
     protected SoundEvent getAmbientSound() {
-        return SpawnSoundEvents.FISH_AMBIENT;
+        return SoundEvents.EMPTY;
     }
 
     @Override

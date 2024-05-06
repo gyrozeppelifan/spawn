@@ -7,6 +7,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
@@ -105,7 +106,7 @@ public class Whale extends Animal {
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
-        return SpawnSoundEvents.FISH_AMBIENT;
+        return SoundEvents.EMPTY;
     }
 
     @Nullable

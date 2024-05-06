@@ -206,5 +206,9 @@
 
   "entity.spawn.krill_swarm": "Krill Swarm",
   "item.spawn.krill_swarm_spawn_egg": "Krill Swarm Spawn Egg",
-  "item.spawn.krill_swarm_bucket": "Bucket of Krill Swarm"
+  "item.spawn.krill_swarm_bucket": "Bucket of Krill Swarm",
+
+  "entity.spawn.sunfish": "Sunfish",
+  "item.spawn.sunfish_spawn_egg": "Sunfish Spawn Egg",
+  "item.spawn.baby_sunfish_bucket": "Bucket of Baby Sunfish"
 }

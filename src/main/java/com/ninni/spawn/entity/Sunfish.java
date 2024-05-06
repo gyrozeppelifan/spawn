@@ -2,6 +2,7 @@ package com.ninni.spawn.entity;
 
 import com.ninni.spawn.SpawnTags;
 import com.ninni.spawn.registry.SpawnItems;
+import com.ninni.spawn.registry.SpawnPose;
 import com.ninni.spawn.registry.SpawnSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -10,14 +11,17 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.control.SmoothSwimmingLookControl;
 import net.minecraft.world.entity.ai.control.SmoothSwimmingMoveControl;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
@@ -35,14 +39,21 @@ import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
+
 public class Sunfish extends PathfinderMob implements Bucketable {
     private static final EntityDataAccessor<Integer> AGE = SynchedEntityData.defineId(Sunfish.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> FROM_BUCKET = SynchedEntityData.defineId(Sunfish.class, EntityDataSerializers.BOOLEAN);
+    public final AnimationState idleAnimationState = new AnimationState();
+    public final AnimationState landAnimationState = new AnimationState();
+    public final AnimationState flopAnimationState = new AnimationState();
+    private int idleAnimationTimeout = 0;
+    private int landAnimationTimeout = 0;
 
     public Sunfish(EntityType<? extends PathfinderMob> entityType, Level level) {
         super(entityType, level);
         this.setPathfindingMalus(BlockPathTypes.WATER, 0.0f);
         this.moveControl = new SmoothSwimmingMoveControl(this, 85, 10, 0.02f, 0.1f, true);
+        this.lookControl = new SmoothSwimmingLookControl(this, 10);
     }
 
     @Override
@@ -56,7 +67,7 @@ public class Sunfish extends PathfinderMob implements Bucketable {
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 30.0).add(Attributes.MOVEMENT_SPEED, 0.2f);
+        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 30.0).add(Attributes.MOVEMENT_SPEED, 0.8f);
     }
 
     //@Override
@@ -65,12 +76,69 @@ public class Sunfish extends PathfinderMob implements Bucketable {
     //}
 
 
+    @Nullable
+    @Override
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, @Nullable SpawnGroupData spawnGroupData, @Nullable CompoundTag compoundTag) {
+
+        return super.finalizeSpawn(serverLevelAccessor, difficultyInstance, mobSpawnType, spawnGroupData, compoundTag);
+    }
+
     @Override
     protected InteractionResult mobInteract(Player player, InteractionHand interactionHand) {
         if (this.isBaby() && Bucketable.bucketMobPickup(player, interactionHand, this).isPresent()) {
             return InteractionResult.sidedSuccess(this.level().isClientSide);
         }
         return super.mobInteract(player, interactionHand);
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        if (!this.isBaby()) {
+            if (!this.isInWaterOrBubble()) {
+                if (this.getPose() != Pose.STANDING) this.setPose(Pose.STANDING);
+            } else {
+                if (this.getPose() != Pose.SWIMMING) this.setPose(Pose.SWIMMING);
+            }
+        } else {
+            SpawnPose pose = this.getSunfishAge() == -2 ? SpawnPose.NEWBORN : SpawnPose.BABY;
+            if (this.getPose() != pose.get()) this.setPose(pose.get());
+        }
+
+        if (this.level().isClientSide()) {
+            this.setupAnimationStates();
+        }
+    }
+
+    @Override
+    public EntityDimensions getDimensions(Pose pose) {
+        if (this.isBaby()) {
+            return pose == SpawnPose.NEWBORN.get() ? EntityDimensions.scalable(0.2F, 0.2F) : EntityDimensions.scalable(0.6F, 0.6F);
+        } else {
+            if (pose == Pose.STANDING) return EntityDimensions.scalable(2.2F, 0.5F);
+            else return EntityDimensions.scalable(1.5F, 2.2F);
+        }
+    }
+
+    private void setupAnimationStates() {
+        if (!this.isBaby()) {
+            if (this.isInWaterOrBubble()) {
+                if (this.idleAnimationTimeout <= 0) {
+                    this.idleAnimationTimeout = 20 * 4;
+                    this.idleAnimationState.start(this.tickCount);
+                } else {
+                    --this.idleAnimationTimeout;
+                }
+            } else {
+                if (this.landAnimationTimeout <= 0) {
+                    this.landAnimationTimeout = 20 * 2;
+                    this.landAnimationState.start(this.tickCount);
+                } else {
+                    --this.landAnimationTimeout;
+                }
+
+            }
+        }
     }
 
     public int getSunfishAge() {
@@ -233,7 +301,7 @@ public class Sunfish extends PathfinderMob implements Bucketable {
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
-        return SpawnSoundEvents.FISH_AMBIENT;
+        return SoundEvents.EMPTY;
     }
 
     @Nullable

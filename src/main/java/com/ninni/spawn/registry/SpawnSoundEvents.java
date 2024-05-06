@@ -10,7 +10,6 @@ import static com.ninni.spawn.Spawn.MOD_ID;
 
 public interface SpawnSoundEvents {
 
-    SoundEvent FISH_AMBIENT = register("entity.fish.ambient");
     SoundEvent FISH_FLOP = register("entity.fish.flop");
     SoundEvent FISH_SWIM = register("entity.fish.swim");
     SoundEvent FISH_HURT = register("entity.fish.hurt");
@@ -76,12 +75,6 @@ public interface SpawnSoundEvents {
     SoundEvent ROTTEN_WOOD_TRAPDOOR_OPEN = register("block.rotten_wood_trapdoor.open");
     SoundEvent ROTTEN_WOOD_TRAPDOOR_CLOSE = register("block.rotten_wood_trapdoor.close");
 
-    //TODO sounds for:
-    //Algal sand
-    //Sea cows
-    //Fish customizer
-    //Whale
-    //Whale blocks
 
     SoundEvent MUSIC_DISC_BLINK = register("music_disc.blink");
 

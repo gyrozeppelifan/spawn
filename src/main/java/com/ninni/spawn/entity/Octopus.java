@@ -323,6 +323,7 @@ public class Octopus extends PathfinderMob {
         return false;
     }
 
+    //TODO replace with hashmap
     public static int getId(Item item) {
         if (item == Items.BUCKET) return 0;
         else if (item == Items.GLASS_BOTTLE) return 1;
@@ -370,22 +371,6 @@ public class Octopus extends PathfinderMob {
         @Override
         public void tick() {
             if (!this.octopus.isLocking()) super.tick();
-        }
-    }
-
-    static class OctopusLookControl extends GoodAmphibiousMovement.GoodAmphibiousLookControl {
-        private final Octopus octopus;
-
-        public OctopusLookControl(Octopus octopus) {
-            super(octopus);
-            this.octopus = octopus;
-        }
-
-        @Override
-        public void tick() {
-            if (!this.octopus.isLocking()) {
-                super.tick();
-            }
         }
     }
 

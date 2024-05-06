@@ -98,7 +98,7 @@ public class SpawnEntityType {
                         .defaultAttributes(Sunfish::createAttributes)
                         .spawnGroup(MobCategory.WATER_CREATURE)
                         .spawnRestriction(SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Sunfish::checkSurfaceWaterAnimalSpawnRules)
-                        .dimensions(EntityDimensions.scalable(0.8F, 2F))
+                        .dimensions(EntityDimensions.scalable(1.5F, 2.2F))
         );
         public static final EntityType<AnglerFish> ANGLER_FISH = register(
                 "angler_fish",

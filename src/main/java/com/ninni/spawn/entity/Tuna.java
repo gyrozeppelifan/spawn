@@ -10,6 +10,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
@@ -208,7 +209,7 @@ public class Tuna extends Animal {
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
-        return SpawnSoundEvents.FISH_AMBIENT;
+        return SoundEvents.EMPTY;
     }
 
     @Nullable

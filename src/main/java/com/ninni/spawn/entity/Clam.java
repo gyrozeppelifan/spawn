@@ -75,7 +75,6 @@ public class Clam extends Mob implements VariantHolder<ClamVariant.Variant> {
     protected InteractionResult mobInteract(Player player, InteractionHand interactionHand) {
         ItemStack itemStack = player.getItemInHand(interactionHand);
         if ((itemStack.isEmpty() || itemStack.getItem() instanceof ClamCaseItem) && this.isAlive()) {
-            //TODO sound
             this.playSound(SoundEvents.EMPTY, 1.0f, 1.0f);
             ItemStack itemStack2 = this.getItemStack();
             saveToBucketTag(itemStack2);

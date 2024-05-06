@@ -26,7 +26,6 @@
 		],
 		"subtitle": "subtitles.entity.spawn.fish.death"
 	},
-	"entity.fish.ambient": { "sounds": [], "subtitle": "subtitles.entity.spawn.fish.ambient" },
 	"entity.fish.jump": {
 		"sounds": [
 			"spawn:entity/fish/jump1",

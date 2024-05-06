@@ -2,6 +2,7 @@ package com.ninni.spawn.entity;
 
 import com.ninni.spawn.SpawnTags;
 import com.ninni.spawn.entity.ai.goal.EatSeagrassGoal;
+import com.ninni.spawn.entity.common.DeepLurker;
 import com.ninni.spawn.registry.SpawnBlocks;
 import com.ninni.spawn.registry.SpawnParticleTypes;
 import com.ninni.spawn.registry.SpawnSoundEvents;
@@ -55,7 +56,7 @@ import net.minecraft.world.phys.Vec3;
 
 import static com.ninni.spawn.Spawn.MOD_ID;
 
-public class SeaCow extends WaterAnimal implements Shearable {
+public class SeaCow extends WaterAnimal implements Shearable, DeepLurker {
     public static final ResourceLocation LOOT_COMMON = new ResourceLocation(MOD_ID, "archaeology/sea_cow_common");
     public static final ResourceLocation LOOT_RARE = new ResourceLocation(MOD_ID, "archaeology/sea_cow_rare");
     private static final EntityDataAccessor<Integer> ALGAE = SynchedEntityData.defineId(SeaCow.class, EntityDataSerializers.INT);
@@ -80,9 +81,9 @@ public class SeaCow extends WaterAnimal implements Shearable {
         this.goalSelector.addGoal(0, this.eatBlockGoal);
         this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, Guardian.class, 8.0f, 1.0, 1.0));
         this.goalSelector.addGoal(2, new RandomSwimmingGoal(this, 1.0, 10));
+        this.goalSelector.addGoal(3, new MoveToSeagrassGoal(1.2f, 12, 1));
         this.goalSelector.addGoal(3, new RandomLookAroundGoal(this));
         this.goalSelector.addGoal(4, new LookAtPlayerGoal(this, Player.class, 6.0f));
-        this.goalSelector.addGoal(5, new MoveToSeagrassGoal(1.2f, 12, 1));
     }
 
     public static AttributeSupplier.Builder createAttributes() {

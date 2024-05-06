@@ -1,5 +1,6 @@
 package com.ninni.spawn.client.model;
 
+import com.ninni.spawn.client.animation.SunfishAnimation;
 import com.ninni.spawn.entity.Sunfish;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -7,6 +8,7 @@ import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.util.Mth;
 
 @Environment(value= EnvType.CLIENT)
 @SuppressWarnings("FieldCanBeLocal, unused")
@@ -34,8 +36,40 @@ public class SunfishModel extends HierarchicalModel<Sunfish> {
 
 
     @Override
-    public void setupAnim(Sunfish entity, float f, float g, float h, float i, float j) {
+    public void setupAnim(Sunfish entity, float limbSwing, float limbSwingAmount, float animationProgress, float headYaw, float headPitch) {
+        float pi = (float)Math.PI;
+        this.root.getAllParts().forEach(ModelPart::resetPose);
 
+
+        if (!entity.isBaby()) {
+            this.all.y = 11.0F;
+            this.all.yRot = 0;
+            this.all.zRot = 0;
+            this.tailFin.yRot = 0;
+            this.leftFin.yRot = 0;
+            this.rightFin.yRot = 0;
+            this.topFin.zRot = 0;
+            this.bottomFin.zRot = 0;
+
+            if (entity.isInWaterOrBubble()) {
+                this.animateWalk(SunfishAnimation.SWIM, limbSwing, limbSwingAmount, 1.5f, 8.0f);
+                this.animate(entity.idleAnimationState, SunfishAnimation.IDLE, animationProgress, 1.0f);
+                this.animate(entity.flopAnimationState, SunfishAnimation.FLOP, animationProgress, 1.0f);
+            }
+            else this.animate(entity.landAnimationState, SunfishAnimation.LAND, animationProgress, 1.0f);
+        } else {
+            this.all.zRot = pi/2;
+            this.all.y = Mth.cos(animationProgress * 0.2F) * 1.5F * 0.25F + (entity.getSunfishAge() == -2 ? 22.5F : 19.0F);
+            this.all.yRot = Mth.cos(animationProgress * 0.2F) * 0.4F * 0.25F;
+            this.tailFin.yRot = Mth.cos(animationProgress * 0.4F) * 0.8F * 0.25F;
+            this.leftFin.yRot = Mth.cos(animationProgress * 0.4F) * 0.8F * 0.25F + 0.8F;
+            this.rightFin.yRot = Mth.cos(animationProgress * 0.4F + pi) * 0.8F * 0.25F - 0.8F;
+            this.topFin.zRot = Mth.cos(animationProgress * 0.4F) * 1.6F * 0.25F;
+            this.bottomFin.zRot = Mth.cos(animationProgress * 0.4F + pi) * 1.6F * 0.25F;
+
+            this.all.xRot += headPitch * (float) (Math.PI / 180);
+            this.all.yRot += headYaw * (float) (Math.PI / 180);
+        }
     }
 
     @Override
