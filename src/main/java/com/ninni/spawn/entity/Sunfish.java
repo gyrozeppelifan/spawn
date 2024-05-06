@@ -137,7 +137,7 @@ public class Sunfish extends PathfinderMob implements Bucketable, VariantHolder<
 
     @Override
     public float getWalkTargetValue(BlockPos blockPos, LevelReader levelReader) {
-        if (this.level().isDay()) return this.getDepthPathfindingFavor(blockPos, levelReader);
+        if (this.level().isNight()) return this.getDepthPathfindingFavor(blockPos, levelReader);
         return this.getSurfacePathfindingFavor(blockPos, levelReader);
     }
 
@@ -321,9 +321,6 @@ public class Sunfish extends PathfinderMob implements Bucketable, VariantHolder<
         super.tick();
 
         if (this.tickCount % 10 == 0) {
-
-            System.out.println("hp" + this.getHealth());
-            System.out.println("max hp" + this.getMaxHealth());
             int i = this.getSunfishAge();
             if (i == -2 && this.getAttribute(Attributes.MAX_HEALTH).getBaseValue() != 6) {
                 this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(6.0);
@@ -348,7 +345,6 @@ public class Sunfish extends PathfinderMob implements Bucketable, VariantHolder<
                 SpawnPose pose = i == -2 ? SpawnPose.NEWBORN : SpawnPose.BABY;
                 if (this.getPose() != pose.get()) this.setPose(pose.get());
             }
-
             refreshDimensions();
         }
 
