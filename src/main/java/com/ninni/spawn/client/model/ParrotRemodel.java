@@ -39,7 +39,7 @@ public class ParrotRemodel extends ParrotModel {
         this.rightLeg = modelPart.getChild("right_leg");
     }
     
-    public static LayerDefinition createBodyLayer() {
+    public static LayerDefinition createRemodel() {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
 

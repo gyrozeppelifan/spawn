@@ -7,6 +7,7 @@ public class SpawnRPTweaks {
 
     public enum Tweaks {
         PARROT_MODEL("parrot_remodel"),
+        RABBIT_REMODEL("rabbit_remodel"),
         TURTLE_ANIMATIONS("turtle_animations"),
         TURTLE_BABY_HEAD_SCALE("turtle_baby_head_scale");
 

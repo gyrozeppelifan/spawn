@@ -25,6 +25,7 @@
     "client.ParrotOnShoulderLayerMixin",
     "client.ParrotRendererMixin",
     "client.PufferfishRendererMixin",
+    "client.RabbitRendererMixin",
     "client.TurtleModelMixin"
   ],
   "injectors": {
