@@ -1,17 +1,18 @@
 package com.ninni.spawn.entity;
 
-import com.ninni.spawn.registry.SpawnTags;
-import com.ninni.spawn.registry.SpawnItems;
-import com.ninni.spawn.registry.SpawnPose;
-import com.ninni.spawn.registry.SpawnSoundEvents;
-import net.minecraft.Util;
+import com.ninni.spawn.entity.common.DeepLurker;
+import com.ninni.spawn.registry.*;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.stats.Stats;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.ByIdMap;
 import net.minecraft.util.RandomSource;
@@ -28,10 +29,12 @@ import net.minecraft.world.entity.ai.control.SmoothSwimmingMoveControl;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.animal.Bucketable;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -41,10 +44,13 @@ import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.EnumSet;
+import java.util.List;
+import java.util.UUID;
 import java.util.function.IntFunction;
 
 
-public class Sunfish extends PathfinderMob implements Bucketable, VariantHolder<Sunfish.Variant> {
+public class Sunfish extends PathfinderMob implements Bucketable, VariantHolder<Sunfish.Variant>, DeepLurker {
     private static final EntityDataAccessor<Integer> AGE = SynchedEntityData.defineId(Sunfish.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> FROM_BUCKET = SynchedEntityData.defineId(Sunfish.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(Sunfish.class, EntityDataSerializers.INT);
@@ -53,6 +59,9 @@ public class Sunfish extends PathfinderMob implements Bucketable, VariantHolder<
     public final AnimationState flopAnimationState = new AnimationState();
     private int idleAnimationTimeout = 0;
     private int landAnimationTimeout = 0;
+    private int inLove;
+    @Nullable
+    private UUID loveCause;
 
     public Sunfish(EntityType<? extends PathfinderMob> entityType, Level level) {
         super(entityType, level);
@@ -65,9 +74,8 @@ public class Sunfish extends PathfinderMob implements Bucketable, VariantHolder<
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new PanicGoal(this, 1.8));
-        //this.goalSelector.addGoal(3, new BreedGoal(this, 1.0));
+        this.goalSelector.addGoal(3, new BreedGoal(this, 1.0));
         this.goalSelector.addGoal(4, new TemptGoal(this, 1.4, Ingredient.of(SpawnTags.SUNFISH_TEMPTS), false));
-        //this.goalSelector.addGoal(5, new FollowParentGoal(this, 1.1));
         this.goalSelector.addGoal(6, new RandomSwimmingGoal(this, 1.0D, 10));
     }
 
@@ -75,11 +83,11 @@ public class Sunfish extends PathfinderMob implements Bucketable, VariantHolder<
         return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 30.0).add(Attributes.MOVEMENT_SPEED, 0.8f);
     }
 
-    //@Override
-    //public boolean isFood(ItemStack itemStack) {
-    //    return itemStack.is(SpawnTags.SUNFISH_FEEDS);
-    //}
-
+    @Override
+    public float getWalkTargetValue(BlockPos blockPos, LevelReader levelReader) {
+        if (this.level().isDay()) return this.getLurkingPathfindingFavor(blockPos, levelReader);
+        return super.getWalkTargetValue(blockPos, levelReader);
+    }
 
     @Nullable
     @Override
@@ -95,11 +103,219 @@ public class Sunfish extends PathfinderMob implements Bucketable, VariantHolder<
 
     @Override
     protected InteractionResult mobInteract(Player player, InteractionHand interactionHand) {
+        ItemStack itemStack = player.getItemInHand(interactionHand);
+
         if (this.isBaby() && Bucketable.bucketMobPickup(player, interactionHand, this).isPresent()) {
             return InteractionResult.sidedSuccess(this.level().isClientSide);
         }
+
+        if (itemStack.is(SpawnTags.SUNFISH_FEEDS)) {
+            int i = this.getAge();
+            if (!this.level().isClientSide && i == 0 && this.canFallInLove()) {
+                if (!player.isCreative()) itemStack.shrink(1);
+                this.setInLove(player);
+                return InteractionResult.SUCCESS;
+            }
+            if (this.isBaby()) {
+                if (!player.isCreative()) itemStack.shrink(1);
+                this.setAge(this.getAge() + 15 * 20);
+                return InteractionResult.sidedSuccess(this.level().isClientSide);
+            }
+            if (this.level().isClientSide) {
+                return InteractionResult.CONSUME;
+            }
+        }
+
         return super.mobInteract(player, interactionHand);
     }
+
+    //region Love and Breeding
+
+
+    public void spawnChildFromBreeding(ServerLevel serverLevel, Sunfish sunfish) {
+        Sunfish baby = SpawnEntityType.SpawnFish.SUNFISH.create(serverLevel);
+        if (baby == null) return;
+        ServerPlayer serverPlayer = this.getLoveCause();
+        if (serverPlayer == null && sunfish.getLoveCause() != null) serverPlayer = sunfish.getLoveCause();
+        if (serverPlayer != null) {
+            serverPlayer.awardStat(Stats.ANIMALS_BRED);
+            SpawnCriteriaTriggers.BREED_SUNFISH.trigger(serverPlayer);
+        }
+        this.setAge(6000);
+        sunfish.setAge(6000);
+        this.resetLove();
+        sunfish.resetLove();
+
+        baby.setPersistenceRequired();
+        baby.setAge(-24000);
+        baby.moveTo(this.getX(), this.getY(), this.getZ(), 0.0f, 0.0f);
+        serverLevel.addFreshEntity(baby);
+        serverLevel.broadcastEntityEvent(this, (byte)18);
+        if (serverLevel.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
+            serverLevel.addFreshEntity(new ExperienceOrb(serverLevel, this.getX(), this.getY(), this.getZ(), this.getRandom().nextInt(7) + 1));
+        }
+    }
+
+    @Override
+    protected void customServerAiStep() {
+        if (this.getAge() != 0) {
+            this.inLove = 0;
+        }
+        super.customServerAiStep();
+    }
+
+    @Override
+    public void aiStep() {
+        super.aiStep();
+        if (this.getAge() != 0) {
+            this.inLove = 0;
+        }
+        if (this.inLove > 0) {
+            --this.inLove;
+            if (this.inLove % 10 == 0) {
+                double d = this.random.nextGaussian() * 0.02;
+                double e = this.random.nextGaussian() * 0.02;
+                double f = this.random.nextGaussian() * 0.02;
+                this.level().addParticle(ParticleTypes.HEART, this.getRandomX(1.0), this.getRandomY() + 0.5, this.getRandomZ(1.0), d, e, f);
+            }
+        }
+    }
+
+    @Override
+    public boolean hurt(DamageSource damageSource, float f) {
+        if (this.isInvulnerableTo(damageSource)) {
+            return false;
+        }
+        this.inLove = 0;
+        return super.hurt(damageSource, f);
+    }
+
+    public boolean canFallInLove() {
+        return this.inLove <= 0;
+    }
+
+    public void setInLove(@Nullable Player player) {
+        this.inLove = 600;
+        if (player != null) {
+            this.loveCause = player.getUUID();
+        }
+        this.level().broadcastEntityEvent(this, (byte)18);
+    }
+
+    @Nullable
+    public ServerPlayer getLoveCause() {
+        if (this.loveCause == null) {
+            return null;
+        }
+        Player player = this.level().getPlayerByUUID(this.loveCause);
+        if (player instanceof ServerPlayer) {
+            return (ServerPlayer)player;
+        }
+        return null;
+    }
+
+    public boolean isInLove() {
+        return this.inLove > 0;
+    }
+
+    public void resetLove() {
+        this.inLove = 0;
+    }
+
+    public boolean canMate(Sunfish sunfish) {
+        if (sunfish == this || sunfish.getClass() != this.getClass()) return false;
+        return this.isInLove() && sunfish.isInLove();
+    }
+
+    @Override
+    public void handleEntityEvent(byte b) {
+        if (b == 18) {
+            for (int i = 0; i < 7; ++i) {
+                double d = this.random.nextGaussian() * 0.02;
+                double e = this.random.nextGaussian() * 0.02;
+                double f = this.random.nextGaussian() * 0.02;
+                this.level().addParticle(ParticleTypes.HEART, this.getRandomX(1.0), this.getRandomY() + 0.5, this.getRandomZ(1.0), d, e, f);
+            }
+        } else {
+            super.handleEntityEvent(b);
+        }
+    }
+
+    public static class BreedGoal extends Goal {
+        private static final TargetingConditions PARTNER_TARGETING = TargetingConditions.forNonCombat().range(8.0).ignoreLineOfSight();
+        protected final Sunfish sunfish;
+        private final Class<? extends Sunfish> partnerClass;
+        protected final Level level;
+        @Nullable
+        protected Sunfish partner;
+        private int loveTime;
+        private final double speedModifier;
+
+        public BreedGoal(Sunfish sunfish, double d) {
+            this(sunfish, d, sunfish.getClass());
+        }
+
+        public BreedGoal(Sunfish sunfish, double d, Class<? extends Sunfish> class_) {
+            this.sunfish = sunfish;
+            this.level = sunfish.level();
+            this.partnerClass = class_;
+            this.speedModifier = d;
+            this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
+        }
+
+        @Override
+        public boolean canUse() {
+            if (!this.sunfish.isInLove()) {
+                return false;
+            }
+            this.partner = this.getFreePartner();
+            return this.partner != null;
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            return this.partner.isAlive() && this.partner.isInLove() && this.loveTime < 60;
+        }
+
+        @Override
+        public void stop() {
+            this.partner = null;
+            this.loveTime = 0;
+        }
+
+        @Override
+        public void tick() {
+            this.sunfish.getLookControl().setLookAt(this.partner, 10.0f, this.sunfish.getMaxHeadXRot());
+            this.sunfish.getNavigation().moveTo(this.partner, this.speedModifier);
+            ++this.loveTime;
+            if (this.loveTime >= this.adjustedTickDelay(60) && this.sunfish.distanceToSqr(this.partner) < 9.0) {
+                this.breed();
+            }
+        }
+
+        @Nullable
+        private Sunfish getFreePartner() {
+            List<? extends Sunfish> list = this.level.getNearbyEntities(this.partnerClass, PARTNER_TARGETING, this.sunfish, this.sunfish.getBoundingBox().inflate(8.0));
+            double d = Double.MAX_VALUE;
+            Sunfish sunfish1 = null;
+            for (Sunfish animal2 : list) {
+                if (!this.sunfish.canMate(animal2) || !(this.sunfish.distanceToSqr(animal2) < d)) continue;
+                sunfish1 = animal2;
+                d = this.sunfish.distanceToSqr(animal2);
+            }
+            return sunfish1;
+        }
+
+        protected void breed() {
+            for (int i = 0; i <= (this.sunfish.random.nextInt(0,5) + 1); i++) {
+                this.sunfish.spawnChildFromBreeding((ServerLevel)this.level, this.partner);
+            }
+        }
+    }
+
+    //endregion
+
+    //region Age and Animation
 
     @Override
     public void tick() {
@@ -136,6 +352,11 @@ public class Sunfish extends PathfinderMob implements Bucketable, VariantHolder<
         }
     }
 
+    @Override
+    protected float getStandingEyeHeight(Pose pose, EntityDimensions entityDimensions) {
+        return entityDimensions.height * 0.5f;
+    }
+
     private void setupAnimationStates() {
         if (!this.isBaby()) {
             if (this.isInWaterOrBubble()) {
@@ -163,6 +384,15 @@ public class Sunfish extends PathfinderMob implements Bucketable, VariantHolder<
     }
 
     @Override
+    public boolean isBaby() {
+        return this.getAge() < 0;
+    }
+
+    //endregion
+
+    //region Data
+
+    @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(AGE, 0);
@@ -176,6 +406,10 @@ public class Sunfish extends PathfinderMob implements Bucketable, VariantHolder<
         compoundTag.putBoolean("FromBucket", this.fromBucket());
         compoundTag.putInt("Age", this.getAge());
         compoundTag.putInt("Variant", this.getVariant().getId());
+        compoundTag.putInt("InLove", this.inLove);
+        if (this.loveCause != null) {
+            compoundTag.putUUID("LoveCause", this.loveCause);
+        }
     }
 
     @Override
@@ -184,6 +418,8 @@ public class Sunfish extends PathfinderMob implements Bucketable, VariantHolder<
         this.setFromBucket(compoundTag.getBoolean("FromBucket"));
         this.setVariant(Variant.byId(compoundTag.getInt("Variant")));
         this.setAge(compoundTag.getInt("Age"));
+        this.inLove = compoundTag.getInt("InLove");
+        this.loveCause = compoundTag.hasUUID("LoveCause") ? compoundTag.getUUID("LoveCause") : null;
     }
 
     public int getAge() {
@@ -220,6 +456,54 @@ public class Sunfish extends PathfinderMob implements Bucketable, VariantHolder<
     }
 
     @Override
+    public void setVariant(Variant variant) {
+        this.entityData.set(VARIANT, variant.getId());
+    }
+
+    @Override
+    public Variant getVariant() {
+        return Variant.byId(this.entityData.get(VARIANT));
+    }
+
+
+    public enum Variant implements StringRepresentable {
+        PLAIN(0, "plain"),
+        STRIPED(1, "striped"),
+        PLAIN_DARK(2, "plain_dark"),
+        STRIPED_DARK(3, "striped_dark");
+
+        private static final IntFunction<Variant> BY_ID = ByIdMap.sparse(Variant::getId, Variant.values(), PLAIN);
+        private final int id;
+        private final String name;
+
+        Variant(int id, String name) {
+            this.id = id;
+            this.name = name;
+        }
+
+        public int getId() {
+            return this.id;
+        }
+
+        public String getSerializedName() {
+            return this.name;
+        }
+
+        public static Variant byId(int id) {
+            return BY_ID.apply(id);
+        }
+    }
+
+    //endregion
+
+    //region Water Mob code
+
+    @Override
+    public boolean requiresCustomPersistence() {
+        return super.requiresCustomPersistence() || this.fromBucket();
+    }
+
+    @Override
     public void travel(Vec3 vec3) {
         if (this.isEffectiveAi() && this.isInWater()) {
             this.moveRelative(0.01f, vec3);
@@ -241,14 +525,7 @@ public class Sunfish extends PathfinderMob implements Bucketable, VariantHolder<
         if (this.getAge() < 0) this.setAge(this.getAge() + 1);
         this.handleAirSupply(i);
     }
-    @Override
-    protected PathNavigation createNavigation(Level level) {
-        return new WaterBoundPathNavigation(this, level);
-    }
-    @Override
-    protected float getStandingEyeHeight(Pose pose, EntityDimensions entityDimensions) {
-        return entityDimensions.height * 0.5f;
-    }
+
     protected void handleAirSupply(int i) {
         if (this.isAlive() && !this.isInWaterOrBubble()) {
             this.setAirSupply(i - 1);
@@ -259,6 +536,11 @@ public class Sunfish extends PathfinderMob implements Bucketable, VariantHolder<
         } else {
             this.setAirSupply(300);
         }
+    }
+
+    @Override
+    protected PathNavigation createNavigation(Level level) {
+        return new WaterBoundPathNavigation(this, level);
     }
 
     @Override
@@ -306,6 +588,20 @@ public class Sunfish extends PathfinderMob implements Bucketable, VariantHolder<
         return false;
     }
 
+    @Override
+    public ItemStack getBucketItemStack() {
+        return SpawnItems.BABY_SUNFISH_BUCKET.getDefaultInstance();
+    }
+
+    @Override
+    public SoundEvent getPickupSound() {
+        return SoundEvents.BUCKET_FILL_FISH;
+    }
+
+    //endregion
+
+    //region Sounds
+
     @Nullable
     @Override
     protected SoundEvent getDeathSound() {
@@ -329,68 +625,11 @@ public class Sunfish extends PathfinderMob implements Bucketable, VariantHolder<
         return SpawnSoundEvents.FISH_HURT;
     }
 
-
     @Override
     protected void playStepSound(BlockPos blockPos, BlockState blockState) {}
 
-    @Override
-    public boolean requiresCustomPersistence() {
-        return super.requiresCustomPersistence() || this.fromBucket();
-    }
+    //endregion
 
-    @Override
-    public ItemStack getBucketItemStack() {
-        return SpawnItems.BABY_SUNFISH_BUCKET.getDefaultInstance();
-    }
-
-    @Override
-    public SoundEvent getPickupSound() {
-        return SoundEvents.BUCKET_FILL_FISH;
-    }
-
-    @Override
-    public boolean isBaby() {
-        return this.getAge() < 0;
-    }
-
-    @Override
-    public void setVariant(Variant variant) {
-        this.entityData.set(VARIANT, variant.getId());
-    }
-
-    @Override
-    public Variant getVariant() {
-        return Variant.byId(this.entityData.get(VARIANT));
-    }
-
-
-    public enum Variant implements StringRepresentable {
-        PLAIN(0, "plain"),
-        STRIPED(1, "striped"),
-        PLAIN_DARK(2, "plain_dark"),
-        STRIPED_DARK(3, "striped_dark");
-
-        private static final IntFunction<Variant> BY_ID = ByIdMap.sparse(Variant::getId, Variant.values(), PLAIN);
-        private final int id;
-        private final String name;
-
-        Variant(int id, String name) {
-            this.id = id;
-            this.name = name;
-        }
-
-        public int getId() {
-            return this.id;
-        }
-
-        public String getSerializedName() {
-            return this.name;
-        }
-
-        public static Variant byId(int id) {
-            return BY_ID.apply(id);
-        }
-    }
 
     @SuppressWarnings("unused, deprecation")
     public static boolean checkSurfaceWaterAnimalSpawnRules(EntityType<Sunfish> mobEntityType, ServerLevelAccessor serverLevelAccessor, MobSpawnType mobSpawnType, BlockPos blockPos, RandomSource randomSource) {

@@ -19,6 +19,7 @@
   "advancements.spawn.interact_with_angler_fish.description": "Dai degli oggetti scintillanti ad un pesce abissale e ricevi la sua benedizione",
 
   "entity.spawn.tuna": "Tonno",
+  "entity.spawn.tuna_egg": "Uovo di tonno",
   "item.spawn.tuna_spawn_egg": "Uovo generatore di tonno",
   "item.spawn.tuna_chunk": "Trancio di tonno",
   "item.spawn.cooked_tuna_chunk": "Trancio di tonno cotto",
@@ -138,13 +139,26 @@
 
   "block.spawn.algal_sand": "Sabbia con erba acquatica",
   "block.spawn.trimmed_seagrass": "Erba acquatica tagliata",
-  "container.spawn.pigment_shifter": "Personalizza",
-  "container.spawn.pigment_shifter.body_plan": "Cambia corporatura",
-  "container.spawn.pigment_shifter.pattern": "Cambia pattern",
+  "item.spawn.school_pottery_sherd": "Coccio con banco",
+  "item.spawn.shell_pottery_sherd": "Coccio con guscio",
+  "item.spawn.music_disc_blink": "Disco Musicale",
+  "item.spawn.music_disc_blink.desc": "Ninni - blink",
 
   "entity.spawn.clam": "Conchiglia",
   "item.spawn.clam_spawn_egg": "Uovo generatore di conchiglia",
   "item.spawn.clam": "Conchiglia",
+  "item.spawn.shell_fragments": "Frammenti di gusci",
+  "item.spawn.clam_meat": "Vongola",
+  "item.spawn.cooked_clam_meat": "Vongola cotta",
+  "item.spawn.clam_chowder": "Zuppa di vongole",
+  "item.spawn.clam_case": "Astuccio Marino",
+  "item.spawn.clam_case.fullness": "%s/%s",
+  "item.spawn.clam_case.desc": "Contiene solo animali catturati",
+  "block.spawn.clam_launcher": "Conchiglia da lancio",
+  "block.spawn.pigment_shifter": "Arrangiatore di pigmenti",
+  "container.spawn.pigment_shifter": "Personalizza",
+  "container.spawn.pigment_shifter.body_plan": "Cambia corporatura",
+  "container.spawn.pigment_shifter.pattern": "Cambia livrea",
   "entity.spawn.clam.random": "Livrea casuale",
   "entity.spawn.clam.base.wedge_shell": "tellina",
   "entity.spawn.clam.base.scallop": "pettine",
@@ -164,6 +178,15 @@
   "entity.spawn.clam.pattern.tiled": "a piastrelle,",
   "entity.spawn.clam.pattern.ridged": "e increspata,",
 
+  "entity.spawn.octopus": "Polpo",
+  "item.spawn.octopus_spawn_egg": "Uovo generatore di polpo",
+  "item.spawn.captured_octopus": "Polpo catturato",
+  "item.spawn.captured_octopus.no_container": "Nessun contenitore",
+  "spawn.container.isAlreadyLocked": "%s è già blindata!",
+  "spawn.container.createdKey": "Lava %s in un calderone per rimuovere l'aspetto chiave",
+  "spawn.item.isKey": "Associato a %s",
+  "subtitles.item.goat_horn.octopus": "Corno di capra fallisce nel suonare",
+
   "entity.spawn.sea_cow": "Mucca di mare",
   "item.spawn.sea_cow_spawn_egg": "Uovo generatore di mucca di mare",
 
@@ -180,5 +203,14 @@
 
   "entity.spawn.krill_swarm": "Banco di krill",
   "item.spawn.krill_swarm_spawn_egg": "Uovo generatore di banco di krill",
-  "item.spawn.krill_swarm_bucket": "Secchio con banco di krill"
+  "item.spawn.krill_swarm_bucket": "Secchio con banco di krill",
+
+  "entity.spawn.sunfish": "Pesce luna",
+  "item.spawn.sunfish_spawn_egg": "Uovo generatore di pesce luna",
+  "item.spawn.baby_sunfish_bucket": "Secchio con cucciolo di pesce luna",
+  "advancements.spawn.breed_sunfish.title": "Baby Boom!",
+  "advancements.spawn.breed_sunfish.description": "Fai accoppiare due pesci luna",
+
+  "entity.spawn.sea_lion": "Leone marino",
+  "item.spawn.sea_lion_spawn_egg": "Uovo generatore di leone marino"
 }

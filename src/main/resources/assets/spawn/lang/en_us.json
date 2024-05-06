@@ -210,5 +210,7 @@
 
   "entity.spawn.sunfish": "Sunfish",
   "item.spawn.sunfish_spawn_egg": "Sunfish Spawn Egg",
-  "item.spawn.baby_sunfish_bucket": "Bucket of Baby Sunfish"
+  "item.spawn.baby_sunfish_bucket": "Bucket of Baby Sunfish",
+  "advancements.spawn.breed_sunfish.title": "Baby Boom!",
+  "advancements.spawn.breed_sunfish.description": "Breed two Sunfish together"
 }

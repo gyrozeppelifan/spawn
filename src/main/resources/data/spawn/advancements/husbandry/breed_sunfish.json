@@ -1,0 +1,29 @@
+{
+  "parent": "minecraft:husbandry/breed_an_animal",
+  "criteria": {
+    "breed_sunfish": {
+      "trigger": "spawn:breed_sunfish"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.spawn.breed_sunfish.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "spawn:baby_sunfish_bucket"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.spawn.breed_sunfish.title"
+    }
+  },
+  "requirements": [
+    [
+      "breed_sunfish"
+    ]
+  ],
+  "sends_telemetry_event": true
+}
