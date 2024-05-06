@@ -1,7 +1,7 @@
 package com.ninni.spawn.block;
 
 
-import com.ninni.spawn.SpawnProperties;
+import com.ninni.spawn.registry.SpawnProperties;
 import com.ninni.spawn.registry.SpawnTags;
 import com.ninni.spawn.registry.SpawnCriteriaTriggers;
 import com.ninni.spawn.registry.SpawnEntityType;

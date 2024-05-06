@@ -1,6 +1,6 @@
 package com.ninni.spawn.block;
 
-import com.ninni.spawn.SpawnProperties;
+import com.ninni.spawn.registry.SpawnProperties;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;

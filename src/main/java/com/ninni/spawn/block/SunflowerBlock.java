@@ -1,10 +1,10 @@
 package com.ninni.spawn.block;
 
-import com.ninni.spawn.SpawnProperties;
 import com.ninni.spawn.block.entity.SunflowerBlockEntity;
 import com.ninni.spawn.block.state.properties.SunflowerRotation;
 import com.ninni.spawn.registry.SpawnBlockEntityTypes;
 import com.ninni.spawn.registry.SpawnItems;
+import com.ninni.spawn.registry.SpawnProperties;
 import com.ninni.spawn.registry.SpawnSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;

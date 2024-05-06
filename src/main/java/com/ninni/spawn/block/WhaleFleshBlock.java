@@ -1,6 +1,6 @@
 package com.ninni.spawn.block;
 
-import com.ninni.spawn.SpawnProperties;
+import com.ninni.spawn.registry.SpawnProperties;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;

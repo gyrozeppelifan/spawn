@@ -2,6 +2,7 @@ package com.ninni.spawn.mixin.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.ninni.spawn.SpawnRPTweaks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.QuadrupedModel;
 import net.minecraft.client.model.TurtleModel;
@@ -27,7 +28,7 @@ public abstract class TurtleModelMixin<T extends Turtle> extends QuadrupedModel<
 
     @Override
     public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int i, int j, float f, float g, float h, float k) {
-        if (Minecraft.getInstance().getResourceManager().getResource(new ResourceLocation("tweaks/turtle_baby_head_scale.txt")).isPresent()) {
+        if (SpawnRPTweaks.isPresent(SpawnRPTweaks.Tweaks.TURTLE_BABY_HEAD_SCALE)) {
 
             if (this.young) {
                 poseStack.pushPose();
@@ -54,7 +55,7 @@ public abstract class TurtleModelMixin<T extends Turtle> extends QuadrupedModel<
 
     @Inject(method = "setupAnim(Lnet/minecraft/world/entity/animal/Turtle;FFFFF)V", at = @At("HEAD"), cancellable = true)
     private void setupAnim(T turtle, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch, CallbackInfo ci) {
-        if (Minecraft.getInstance().getResourceManager().getResource(new ResourceLocation("tweaks/turtle_animations.txt")).isPresent()) {
+        if (SpawnRPTweaks.isPresent(SpawnRPTweaks.Tweaks.TURTLE_ANIMATIONS)) {
             ci.cancel();
 
             float pi = (float) Math.PI;

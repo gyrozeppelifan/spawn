@@ -1,6 +1,7 @@
 package com.ninni.spawn.mixin.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.ninni.spawn.SpawnRPTweaks;
 import com.ninni.spawn.client.model.ParrotRemodel;
 import com.ninni.spawn.registry.SpawnEntityModelLayers;
 import net.fabricmc.api.EnvType;
@@ -39,8 +40,8 @@ public abstract class ParrotOnShoulderLayerMixin<T extends Player> extends Rende
         this.remodel = new ParrotRemodel(entityModelSet.bakeLayer(SpawnEntityModelLayers.PARROT_REMODEL));
     }
 
-    @Inject(method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/player/Player;FFFFZ)V", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/player/Player;FFFFZ)V", at = @At("HEAD"))
     private void S$render(PoseStack poseStack, MultiBufferSource multiBufferSource, int i, T player, float f, float g, float h, float j, boolean bl, CallbackInfo ci) {
-        if (Minecraft.getInstance().getResourceManager().getResource(new ResourceLocation("tweaks/parrot_remodel.txt")).isPresent()) this.model = this.remodel;
+        if (SpawnRPTweaks.isPresent(SpawnRPTweaks.Tweaks.PARROT_MODEL)) this.model = this.remodel;
     }
 }

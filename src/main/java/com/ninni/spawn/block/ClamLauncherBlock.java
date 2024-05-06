@@ -1,14 +1,12 @@
 package com.ninni.spawn.block;
 
-import com.ninni.spawn.SpawnProperties;
 import com.ninni.spawn.block.entity.ClamLauncherBlockEntity;
-import com.ninni.spawn.block.entity.PigmentShifterBlockEntity;
 import com.ninni.spawn.registry.SpawnBlockEntityTypes;
+import com.ninni.spawn.registry.SpawnProperties;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;

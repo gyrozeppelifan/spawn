@@ -1,4 +1,4 @@
-package com.ninni.spawn;
+package com.ninni.spawn.registry;
 
 import com.ninni.spawn.block.state.properties.SunflowerRotation;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;

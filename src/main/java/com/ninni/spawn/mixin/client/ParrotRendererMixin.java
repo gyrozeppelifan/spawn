@@ -1,6 +1,7 @@
 package com.ninni.spawn.mixin.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.ninni.spawn.SpawnRPTweaks;
 import com.ninni.spawn.client.model.ParrotRemodel;
 import com.ninni.spawn.registry.SpawnEntityModelLayers;
 import net.fabricmc.api.EnvType;
@@ -34,7 +35,7 @@ public abstract class ParrotRendererMixin extends MobRenderer<Parrot, ParrotMode
 
     @Override
     public void render(Parrot mob, float f, float g, PoseStack poseStack, MultiBufferSource multiBufferSource, int i) {
-        if (Minecraft.getInstance().getResourceManager().getResource(new ResourceLocation("tweaks/parrot_remodel.txt")).isPresent()) this.model = this.remodel;
+        if (SpawnRPTweaks.isPresent(SpawnRPTweaks.Tweaks.PARROT_MODEL)) this.model = this.remodel;
         super.render(mob, f, g, poseStack, multiBufferSource, i);
     }
 }

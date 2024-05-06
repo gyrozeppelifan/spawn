@@ -1,1 +1,13 @@
-Include this file in your resource pack to enable baby turtle head scaling if Spawn is installed.
+
+
+* This tweak enables a new baby turtle model that has a bigger head.
+
+
+
+    What is a Tweak?
+
+        Tweaks are client side modifications.
+        They are .txt files stored in the "minecraft/tweaks/" folder of resource packs,
+        each of them alters specific aspects of your game as long as Spawn is installed.
+        By including the desired tweaks in your resource pack, you can selectively activate features like model enhancements, animation freshen-ups and visual changes.
+        The "Animal Tweaks" resource pack, bundled with Spawn, automatically contains all available tweaks for you to choose from.
