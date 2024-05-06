@@ -1,6 +1,6 @@
 package com.ninni.spawn.entity;
 
-import com.ninni.spawn.entity.common.DeepLurker;
+import com.ninni.spawn.entity.common.PathFindingFavors;
 import com.ninni.spawn.registry.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -50,7 +50,7 @@ import java.util.UUID;
 import java.util.function.IntFunction;
 
 
-public class Sunfish extends PathfinderMob implements Bucketable, VariantHolder<Sunfish.Variant>, DeepLurker {
+public class Sunfish extends PathfinderMob implements Bucketable, VariantHolder<Sunfish.Variant>, PathFindingFavors {
     private static final EntityDataAccessor<Integer> AGE = SynchedEntityData.defineId(Sunfish.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> FROM_BUCKET = SynchedEntityData.defineId(Sunfish.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(Sunfish.class, EntityDataSerializers.INT);
@@ -81,12 +81,6 @@ public class Sunfish extends PathfinderMob implements Bucketable, VariantHolder<
 
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 6.0).add(Attributes.MOVEMENT_SPEED, 0.8f);
-    }
-
-    @Override
-    public float getWalkTargetValue(BlockPos blockPos, LevelReader levelReader) {
-        if (this.level().isDay()) return this.getLurkingPathfindingFavor(blockPos, levelReader);
-        return super.getWalkTargetValue(blockPos, levelReader);
     }
 
     @Nullable
@@ -139,6 +133,12 @@ public class Sunfish extends PathfinderMob implements Bucketable, VariantHolder<
         }
 
         return super.mobInteract(player, interactionHand);
+    }
+
+    @Override
+    public float getWalkTargetValue(BlockPos blockPos, LevelReader levelReader) {
+        if (this.level().isDay()) return this.getDepthPathfindingFavor(blockPos, levelReader);
+        return this.getSurfacePathfindingFavor(blockPos, levelReader);
     }
 
     //region Love and Breeding

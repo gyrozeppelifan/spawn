@@ -4,7 +4,8 @@ import net.minecraft.world.entity.Pose;
 
 public enum SpawnPose {
     NEWBORN,
-    BABY;
+    BABY,
+    BREACHING;
 
     public Pose get() {
         return Pose.valueOf(this.name());

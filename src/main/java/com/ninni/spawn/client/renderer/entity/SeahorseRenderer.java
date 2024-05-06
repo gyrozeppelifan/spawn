@@ -3,18 +3,14 @@ package com.ninni.spawn.client.renderer.entity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.ninni.spawn.client.model.SeahorseModel;
 import com.ninni.spawn.client.renderer.entity.feature.SeahorsePatternLayer;
-import com.ninni.spawn.entity.common.DeepLurker;
 import com.ninni.spawn.registry.SpawnEntityModelLayers;
 import com.ninni.spawn.entity.Seahorse;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.model.ColorableHierarchicalModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.client.renderer.entity.layers.TropicalFishPatternLayer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.animal.TropicalFish;
 
 import static com.ninni.spawn.Spawn.MOD_ID;
 

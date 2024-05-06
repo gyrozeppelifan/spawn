@@ -2,7 +2,7 @@ package com.ninni.spawn.entity;
 
 
 import com.ninni.spawn.registry.SpawnTags;
-import com.ninni.spawn.entity.common.DeepLurker;
+import com.ninni.spawn.entity.common.PathFindingFavors;
 import com.ninni.spawn.entity.common.FlopConditionable;
 import com.ninni.spawn.registry.SpawnCriteriaTriggers;
 import com.ninni.spawn.registry.SpawnItems;
@@ -35,7 +35,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import org.jetbrains.annotations.Nullable;
 
-public class AnglerFish extends AbstractFish implements Bucketable, DeepLurker, FlopConditionable {
+public class AnglerFish extends AbstractFish implements Bucketable, PathFindingFavors, FlopConditionable {
     public static final Ingredient TEMPT_INGREDIENT = Ingredient.of(SpawnTags.ANGLER_FISH_TEMPTS);
     public static final String LAST_EFFECT_GIVEN_KEY = "LastEffectGiven";
 
@@ -136,7 +136,7 @@ public class AnglerFish extends AbstractFish implements Bucketable, DeepLurker, 
 
     @Override
     public float getWalkTargetValue(BlockPos blockPos, LevelReader levelReader) {
-        return this.getLurkingPathfindingFavor(blockPos, levelReader);
+        return this.getDepthPathfindingFavor(blockPos, levelReader);
     }
 
     @Override

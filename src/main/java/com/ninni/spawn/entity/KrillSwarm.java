@@ -1,6 +1,6 @@
 package com.ninni.spawn.entity;
 
-import com.ninni.spawn.entity.common.DeepLurker;
+import com.ninni.spawn.entity.common.PathFindingFavors;
 import com.ninni.spawn.entity.common.FlopConditionable;
 import com.ninni.spawn.registry.SpawnItems;
 import com.ninni.spawn.registry.SpawnParticleTypes;
@@ -19,7 +19,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 
-public class KrillSwarm extends AbstractSchoolingFish implements FlopConditionable, DeepLurker {
+public class KrillSwarm extends AbstractSchoolingFish implements FlopConditionable, PathFindingFavors {
 
     public KrillSwarm(EntityType<? extends AbstractSchoolingFish> entityType, Level level) {
         super(entityType, level);
@@ -72,7 +72,7 @@ public class KrillSwarm extends AbstractSchoolingFish implements FlopConditionab
 
     @Override
     public float getWalkTargetValue(BlockPos blockPos, LevelReader levelReader) {
-        return this.getLurkingPathfindingFavor(blockPos, levelReader);
+        return this.getDepthPathfindingFavor(blockPos, levelReader);
     }
 
     @Override

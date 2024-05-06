@@ -2,7 +2,7 @@ package com.ninni.spawn.entity;
 
 import com.ninni.spawn.registry.SpawnTags;
 import com.ninni.spawn.entity.ai.goal.EatSeagrassGoal;
-import com.ninni.spawn.entity.common.DeepLurker;
+import com.ninni.spawn.entity.common.PathFindingFavors;
 import com.ninni.spawn.registry.SpawnBlocks;
 import com.ninni.spawn.registry.SpawnParticleTypes;
 import com.ninni.spawn.registry.SpawnSoundEvents;
@@ -56,7 +56,7 @@ import net.minecraft.world.phys.Vec3;
 
 import static com.ninni.spawn.Spawn.MOD_ID;
 
-public class SeaCow extends WaterAnimal implements Shearable, DeepLurker {
+public class SeaCow extends WaterAnimal implements Shearable, PathFindingFavors {
     public static final ResourceLocation LOOT_COMMON = new ResourceLocation(MOD_ID, "archaeology/sea_cow_common");
     public static final ResourceLocation LOOT_RARE = new ResourceLocation(MOD_ID, "archaeology/sea_cow_rare");
     private static final EntityDataAccessor<Integer> ALGAE = SynchedEntityData.defineId(SeaCow.class, EntityDataSerializers.INT);
@@ -229,6 +229,12 @@ public class SeaCow extends WaterAnimal implements Shearable, DeepLurker {
             }
         }
         this.setAlgaeAmount(0);
+    }
+
+    @Override
+    public float getWalkTargetValue(BlockPos blockPos, LevelReader levelReader) {
+        if (this.getFullness() >= this.maxFullness / 2) return this.getDepthPathfindingFavor(blockPos, levelReader);
+        return super.getWalkTargetValue(blockPos, levelReader);
     }
 
 

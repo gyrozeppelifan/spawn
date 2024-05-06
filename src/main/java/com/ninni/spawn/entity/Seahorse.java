@@ -1,7 +1,7 @@
 package com.ninni.spawn.entity;
 
 import com.mojang.serialization.Codec;
-import com.ninni.spawn.entity.common.DeepLurker;
+import com.ninni.spawn.entity.common.PathFindingFavors;
 import com.ninni.spawn.registry.SpawnItems;
 import com.ninni.spawn.registry.SpawnSoundEvents;
 import net.minecraft.Util;
@@ -35,7 +35,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.IntFunction;
 
-public class Seahorse extends AbstractFish implements VariantHolder<Seahorse.Pattern>, DeepLurker {
+public class Seahorse extends AbstractFish implements VariantHolder<Seahorse.Pattern>, PathFindingFavors {
     private static final EntityDataAccessor<Integer> DATA_ID_TYPE_VARIANT = SynchedEntityData.defineId(Seahorse.class, EntityDataSerializers.INT);
 
     public Seahorse(EntityType<? extends Seahorse> type, Level world) {
@@ -74,7 +74,7 @@ public class Seahorse extends AbstractFish implements VariantHolder<Seahorse.Pat
 
     @Override
     public float getWalkTargetValue(BlockPos blockPos, LevelReader levelReader) {
-        return this.getLurkingPathfindingFavor(blockPos, levelReader);
+        return this.getDepthPathfindingFavor(blockPos, levelReader);
     }
 
     public static AttributeSupplier.Builder createAttributes() {
