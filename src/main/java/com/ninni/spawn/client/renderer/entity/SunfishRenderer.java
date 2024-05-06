@@ -15,7 +15,6 @@ import static com.ninni.spawn.Spawn.MOD_ID;
 
 @Environment(EnvType.CLIENT)
 public class SunfishRenderer extends MobRenderer<Sunfish, SunfishModel> {
-    public static final ResourceLocation TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/sunfish/sunfish_plain.png");
     public static final ResourceLocation BABY_TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/sunfish/sunfish_baby.png");
     public static final ResourceLocation NEWBORN_TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/sunfish/sunfish_newborn.png");
     private final SunfishModel modelAdult = this.getModel();
@@ -30,11 +29,10 @@ public class SunfishRenderer extends MobRenderer<Sunfish, SunfishModel> {
 
     @Override
     public ResourceLocation getTextureLocation(Sunfish sunfish) {
-
         return switch (sunfish.getSunfishAge()) {
             case -2 -> NEWBORN_TEXTURE;
             case -1 -> BABY_TEXTURE;
-            default ->  TEXTURE;
+            default ->  new ResourceLocation(MOD_ID, "textures/entity/sunfish/sunfish_" + sunfish.getVariant().getSerializedName() + ".png");
         };
     }
 

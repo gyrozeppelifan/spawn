@@ -4,6 +4,7 @@ import com.ninni.spawn.SpawnTags;
 import com.ninni.spawn.registry.SpawnItems;
 import com.ninni.spawn.registry.SpawnPose;
 import com.ninni.spawn.registry.SpawnSoundEvents;
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -11,9 +12,10 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.util.ByIdMap;
 import net.minecraft.util.RandomSource;
+import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -39,10 +41,13 @@ import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.IntFunction;
 
-public class Sunfish extends PathfinderMob implements Bucketable {
+
+public class Sunfish extends PathfinderMob implements Bucketable, VariantHolder<Sunfish.Variant> {
     private static final EntityDataAccessor<Integer> AGE = SynchedEntityData.defineId(Sunfish.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> FROM_BUCKET = SynchedEntityData.defineId(Sunfish.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(Sunfish.class, EntityDataSerializers.INT);
     public final AnimationState idleAnimationState = new AnimationState();
     public final AnimationState landAnimationState = new AnimationState();
     public final AnimationState flopAnimationState = new AnimationState();
@@ -79,8 +84,12 @@ public class Sunfish extends PathfinderMob implements Bucketable {
     @Nullable
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, @Nullable SpawnGroupData spawnGroupData, @Nullable CompoundTag compoundTag) {
-
-        return super.finalizeSpawn(serverLevelAccessor, difficultyInstance, mobSpawnType, spawnGroupData, compoundTag);
+        if (mobSpawnType == MobSpawnType.BUCKET) {
+            return spawnGroupData;
+        } else {
+            this.setVariant(Util.getRandom(Variant.values(), this.random));
+            return super.finalizeSpawn(serverLevelAccessor, difficultyInstance, mobSpawnType, spawnGroupData, compoundTag);
+        }
     }
 
     @Override
@@ -94,16 +103,22 @@ public class Sunfish extends PathfinderMob implements Bucketable {
     @Override
     public void tick() {
         super.tick();
-        if (!this.isBaby()) {
-            if (!this.isInWaterOrBubble()) {
-                if (this.getPose() != Pose.STANDING) this.setPose(Pose.STANDING);
+
+        if (this.tickCount % 10 == 0) {
+            if (!this.isBaby()) {
+                if (!this.isInWaterOrBubble()) {
+                    if (this.getPose() != Pose.STANDING) this.setPose(Pose.STANDING);
+                } else {
+                    if (this.getPose() != Pose.SWIMMING) this.setPose(Pose.SWIMMING);
+                }
             } else {
-                if (this.getPose() != Pose.SWIMMING) this.setPose(Pose.SWIMMING);
+                SpawnPose pose = this.getSunfishAge() == -2 ? SpawnPose.NEWBORN : SpawnPose.BABY;
+                if (this.getPose() != pose.get()) this.setPose(pose.get());
             }
-        } else {
-            SpawnPose pose = this.getSunfishAge() == -2 ? SpawnPose.NEWBORN : SpawnPose.BABY;
-            if (this.getPose() != pose.get()) this.setPose(pose.get());
+
+            refreshDimensions();
         }
+
 
         if (this.level().isClientSide()) {
             this.setupAnimationStates();
@@ -151,6 +166,7 @@ public class Sunfish extends PathfinderMob implements Bucketable {
         super.defineSynchedData();
         this.entityData.define(AGE, 0);
         this.entityData.define(FROM_BUCKET, false);
+        this.entityData.define(VARIANT, 0);
     }
 
     @Override
@@ -158,12 +174,14 @@ public class Sunfish extends PathfinderMob implements Bucketable {
         super.addAdditionalSaveData(compoundTag);
         compoundTag.putBoolean("FromBucket", this.fromBucket());
         compoundTag.putInt("Age", this.getAge());
+        compoundTag.putInt("Variant", this.getVariant().getId());
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag compoundTag) {
         super.readAdditionalSaveData(compoundTag);
         this.setFromBucket(compoundTag.getBoolean("FromBucket"));
+        this.setVariant(Variant.byId(compoundTag.getInt("Variant")));
         this.setAge(compoundTag.getInt("Age"));
     }
 
@@ -189,14 +207,14 @@ public class Sunfish extends PathfinderMob implements Bucketable {
     public void saveToBucketTag(ItemStack itemStack) {
         CompoundTag compoundTag = itemStack.getOrCreateTag();
         compoundTag.putInt("Age", this.getAge());
+        compoundTag.putInt("Variant", this.getVariant().getId());
         Bucketable.saveDefaultDataToBucketTag(this, itemStack);
     }
 
     @Override
     public void loadFromBucketTag(CompoundTag compoundTag) {
-        if (compoundTag.contains("Age")) {
-            this.setAge(compoundTag.getInt("Age"));
-        }
+        if (compoundTag.contains("Age")) this.setAge(compoundTag.getInt("Age"));
+        if (compoundTag.contains("Variant")) this.setVariant(Variant.byId(compoundTag.getInt("Variant")));
         Bucketable.loadDefaultDataFromBucketTag(this, compoundTag);
     }
 
@@ -314,13 +332,6 @@ public class Sunfish extends PathfinderMob implements Bucketable {
     @Override
     protected void playStepSound(BlockPos blockPos, BlockState blockState) {}
 
-    @SuppressWarnings("unused, deprecation")
-    public static boolean checkSurfaceWaterAnimalSpawnRules(EntityType<Sunfish> mobEntityType, ServerLevelAccessor serverLevelAccessor, MobSpawnType mobSpawnType, BlockPos blockPos, RandomSource randomSource) {
-        int i = serverLevelAccessor.getSeaLevel();
-        int j = i - 13;
-        return blockPos.getY() >= j && blockPos.getY() <= i && serverLevelAccessor.getFluidState(blockPos.below()).is(FluidTags.WATER) && serverLevelAccessor.getBlockState(blockPos.above()).is(Blocks.WATER);
-    }
-
     @Override
     public boolean requiresCustomPersistence() {
         return super.requiresCustomPersistence() || this.fromBucket();
@@ -340,4 +351,51 @@ public class Sunfish extends PathfinderMob implements Bucketable {
     public boolean isBaby() {
         return this.getAge() < 0;
     }
+
+    @Override
+    public void setVariant(Variant variant) {
+        this.entityData.set(VARIANT, variant.getId());
+    }
+
+    @Override
+    public Variant getVariant() {
+        return Variant.byId(this.entityData.get(VARIANT));
+    }
+
+
+    public enum Variant implements StringRepresentable {
+        PLAIN(0, "plain"),
+        PLAIN_DARK(1, "plain_dark"),
+        STRIPED(2, "striped"),
+        STRIPED_DARK(3, "striped_dark");
+
+        private static final IntFunction<Variant> BY_ID = ByIdMap.sparse(Variant::getId, Variant.values(), PLAIN);
+        private final int id;
+        private final String name;
+
+        Variant(int id, String name) {
+            this.id = id;
+            this.name = name;
+        }
+
+        public int getId() {
+            return this.id;
+        }
+
+        public String getSerializedName() {
+            return this.name;
+        }
+
+        public static Variant byId(int id) {
+            return BY_ID.apply(id);
+        }
+    }
+
+    @SuppressWarnings("unused, deprecation")
+    public static boolean checkSurfaceWaterAnimalSpawnRules(EntityType<Sunfish> mobEntityType, ServerLevelAccessor serverLevelAccessor, MobSpawnType mobSpawnType, BlockPos blockPos, RandomSource randomSource) {
+        int i = serverLevelAccessor.getSeaLevel();
+        int j = i - 13;
+        return blockPos.getY() >= j && blockPos.getY() <= i && serverLevelAccessor.getFluidState(blockPos.below()).is(FluidTags.WATER) && serverLevelAccessor.getBlockState(blockPos.above()).is(Blocks.WATER);
+    }
+
 }
