@@ -1,6 +1,6 @@
 package com.ninni.spawn.entity;
 
-import com.ninni.spawn.SpawnTags;
+import com.ninni.spawn.registry.SpawnTags;
 import com.ninni.spawn.registry.SpawnItems;
 import com.ninni.spawn.registry.SpawnPose;
 import com.ninni.spawn.registry.SpawnSoundEvents;
@@ -87,7 +87,8 @@ public class Sunfish extends PathfinderMob implements Bucketable, VariantHolder<
         if (mobSpawnType == MobSpawnType.BUCKET) {
             return spawnGroupData;
         } else {
-            this.setVariant(Util.getRandom(Variant.values(), this.random));
+            int i = serverLevelAccessor.getBiome(blockPosition()).is(SpawnTags.SUNFISH_WARM_VARIANT) ? random.nextInt(0,2) : random.nextInt(2, 4);
+            this.setVariant(Variant.byId(i));
             return super.finalizeSpawn(serverLevelAccessor, difficultyInstance, mobSpawnType, spawnGroupData, compoundTag);
         }
     }
@@ -365,8 +366,8 @@ public class Sunfish extends PathfinderMob implements Bucketable, VariantHolder<
 
     public enum Variant implements StringRepresentable {
         PLAIN(0, "plain"),
-        PLAIN_DARK(1, "plain_dark"),
-        STRIPED(2, "striped"),
+        STRIPED(1, "striped"),
+        PLAIN_DARK(2, "plain_dark"),
         STRIPED_DARK(3, "striped_dark");
 
         private static final IntFunction<Variant> BY_ID = ByIdMap.sparse(Variant::getId, Variant.values(), PLAIN);

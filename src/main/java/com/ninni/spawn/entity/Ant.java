@@ -1,7 +1,7 @@
 package com.ninni.spawn.entity;
 
 import com.google.common.collect.Lists;
-import com.ninni.spawn.SpawnTags;
+import com.ninni.spawn.registry.SpawnTags;
 import com.ninni.spawn.block.entity.AnthillBlockEntity;
 import com.ninni.spawn.registry.SpawnBlockEntityTypes;
 import com.ninni.spawn.registry.SpawnSoundEvents;
@@ -39,7 +39,6 @@ import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.LookControl;
-import net.minecraft.world.entity.ai.goal.BreedGoal;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.FollowOwnerGoal;
 import net.minecraft.world.entity.ai.goal.Goal;

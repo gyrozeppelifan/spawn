@@ -1,6 +1,6 @@
 package com.ninni.spawn.item;
 
-import com.ninni.spawn.SpawnTags;
+import com.ninni.spawn.registry.SpawnTags;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;

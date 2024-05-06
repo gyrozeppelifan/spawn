@@ -52,13 +52,14 @@ public class SunfishModel extends HierarchicalModel<Sunfish> {
             this.bottomFin.zRot = 0;
 
             if (entity.isInWaterOrBubble()) {
-                this.animateWalk(SunfishAnimation.SWIM, limbSwing, limbSwingAmount, 1.5f, 8.0f);
+                this.animateWalk(SunfishAnimation.SWIM, limbSwing, limbSwingAmount, 2.5f, 8.0f);
                 this.animate(entity.idleAnimationState, SunfishAnimation.IDLE, animationProgress, 1.0f);
                 this.animate(entity.flopAnimationState, SunfishAnimation.FLOP, animationProgress, 1.0f);
             }
             else this.animate(entity.landAnimationState, SunfishAnimation.LAND, animationProgress, 1.0f);
         } else {
-            this.all.zRot = pi/2;
+            if (!entity.isInWaterOrBubble()) this.all.zRot = pi/2;
+            else this.all.zRot = 0;
             this.all.y = Mth.cos(animationProgress * 0.2F) * 1.5F * 0.25F + (entity.getSunfishAge() == -2 ? 22.5F : 19.0F);
             this.all.yRot = Mth.cos(animationProgress * 0.2F) * 0.4F * 0.25F;
             this.tailFin.yRot = Mth.cos(animationProgress * 0.4F) * 0.8F * 0.25F;

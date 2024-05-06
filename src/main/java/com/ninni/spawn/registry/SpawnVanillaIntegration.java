@@ -1,7 +1,6 @@
 package com.ninni.spawn.registry;
 
 import com.google.common.reflect.Reflection;
-import com.ninni.spawn.SpawnTags;
 import com.ninni.spawn.client.inventory.PigmentShifterScreen;
 import com.ninni.spawn.client.inventory.HamsterInventoryMenu;
 import com.ninni.spawn.client.inventory.HamsterInventoryScreen;

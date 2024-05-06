@@ -1,4 +1,4 @@
-package com.ninni.spawn;
+package com.ninni.spawn.registry;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -51,6 +51,8 @@ public interface SpawnTags {
     TagKey<Biome> HAMSTER_FREQUENTLY_SPAWNS = TagKey.create(Registries.BIOME, new ResourceLocation(MOD_ID, "hamster_frequently_spawns"));
     TagKey<Biome> HAMSTER_SPAWNS = TagKey.create(Registries.BIOME, new ResourceLocation(MOD_ID, "hamster_spawns"));
     TagKey<Biome> SEA_COW_SPAWNS = TagKey.create(Registries.BIOME, new ResourceLocation(MOD_ID, "sea_cow_spawns"));
+    TagKey<Biome> SUNFISH_WARM_VARIANT = TagKey.create(Registries.BIOME, new ResourceLocation(MOD_ID, "sunfish_warm_variant"));
+    TagKey<Biome> SUNFISH_COLD_VARIANT = TagKey.create(Registries.BIOME, new ResourceLocation(MOD_ID, "sunfish_cold_variant"));
     TagKey<Biome> SMALL_ANTHILL_GENERATES = TagKey.create(Registries.BIOME, new ResourceLocation(MOD_ID, "small_anthill_generates"));
 
     //pointOfInterest tags

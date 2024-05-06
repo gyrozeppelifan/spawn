@@ -1,6 +1,6 @@
 package com.ninni.spawn.client.inventory;
 
-import com.ninni.spawn.SpawnTags;
+import com.ninni.spawn.registry.SpawnTags;
 import com.ninni.spawn.entity.Seahorse;
 import com.ninni.spawn.mixin.accessor.TropicalFishAccessor;
 import com.ninni.spawn.registry.*;
