@@ -12,7 +12,9 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.ByIdMap;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.DifficultyInstance;
@@ -20,6 +22,8 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.control.LookControl;
+import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.RandomSwimmingGoal;
@@ -40,6 +44,8 @@ public class Seahorse extends AbstractFish implements VariantHolder<Seahorse.Pat
 
     public Seahorse(EntityType<? extends Seahorse> type, Level world) {
         super(type, world);
+        this.moveControl = new FishMoveControl(this);
+        this.lookControl = new LookControl(this);
     }
 
     @Nullable
@@ -121,6 +127,42 @@ public class Seahorse extends AbstractFish implements VariantHolder<Seahorse.Pat
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSource) {
         return SpawnSoundEvents.SEAHORSE_HURT;
+    }
+
+    private static class FishMoveControl extends MoveControl {
+        private final AbstractFish fish;
+
+        FishMoveControl(AbstractFish abstractFish) {
+            super(abstractFish);
+            this.fish = abstractFish;
+        }
+
+        public void tick() {
+            if (this.fish.isEyeInFluid(FluidTags.WATER)) {
+                this.fish.setDeltaMovement(this.fish.getDeltaMovement().add(0.0, 0.005, 0.0));
+            }
+
+            if (this.operation == Operation.MOVE_TO && !this.fish.getNavigation().isDone()) {
+                float f = (float)(this.speedModifier * this.fish.getAttributeValue(Attributes.MOVEMENT_SPEED));
+                this.fish.setSpeed(Mth.lerp(0.125F, this.fish.getSpeed(), f));
+                double d = this.wantedX - this.fish.getX();
+                double e = this.wantedY - this.fish.getY();
+                double g = this.wantedZ - this.fish.getZ();
+                if (e != 0.0) {
+                    double h = Math.sqrt(d * d + e * e + g * g);
+                    this.fish.setDeltaMovement(this.fish.getDeltaMovement().add(0.0, (double)this.fish.getSpeed() * (e / h) * 0.1, 0.0));
+                }
+
+                if (d != 0.0 || g != 0.0) {
+                    float i = (float)(Mth.atan2(g, d) * 57.2957763671875) - 90.0F;
+                    this.fish.setYRot(this.rotlerp(this.fish.getYRot(), i, 90.0F));
+                    this.fish.yBodyRot = this.fish.getYRot();
+                }
+
+            } else {
+                this.fish.setSpeed(0.0F);
+            }
+        }
     }
 
     public static String getPredefinedName(int i) {

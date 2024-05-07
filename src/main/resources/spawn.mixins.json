@@ -23,10 +23,14 @@
   "client": [
     "client.BatRendererMixin",
     "client.BlockEntityWithoutLevelRendererMixin",
+    "client.CodModelMixin",
     "client.ParrotOnShoulderLayerMixin",
     "client.ParrotRendererMixin",
     "client.PufferfishRendererMixin",
     "client.RabbitRendererMixin",
+    "client.SalmonModelMixin",
+    "client.TropicalFishModelAMixin",
+    "client.TropicalFishModelBMixin",
     "client.TurtleModelMixin"
   ],
   "injectors": {

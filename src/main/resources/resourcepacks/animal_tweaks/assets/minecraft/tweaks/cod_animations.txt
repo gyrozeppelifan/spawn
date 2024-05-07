@@ -1,0 +1,15 @@
+
+
+* This tweak enables a new animations for cods.
+
+
+
+    What is a Tweak?
+
+        Tweaks are client side modifications.
+        They are .txt files stored in the "minecraft/tweaks/" folder of resource packs,
+        each of them alters specific aspects of your game as long as Spawn is installed.
+        By including the desired tweaks in your resource pack, you can selectively activate features like model enhancements, animation freshen-ups and visual changes.
+        The "Animal Tweaks" resource pack, bundled with Spawn, automatically contains all available tweaks for you to choose from, go check the GitHub to see!
+
+        https://github.com/N1nn1/spawn/tree/update-2/src/main/resources/resourcepacks/animal_tweaks

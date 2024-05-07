@@ -18,8 +18,6 @@ import net.minecraft.world.level.Level;
 public class Herring extends BoidFishEntity {
     public Herring(EntityType<? extends BoidFishEntity> entityType, Level level) {
         super(entityType, level);
-        this.moveControl = new SmoothSwimmingMoveControl(this, 85, 10, 0.02f, 0.1f, true);
-        this.lookControl = new SmoothSwimmingLookControl(this, 10);
     }
 
     public static AttributeSupplier.Builder createAttributes() {
