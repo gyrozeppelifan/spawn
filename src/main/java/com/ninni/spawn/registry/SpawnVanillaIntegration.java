@@ -64,7 +64,8 @@ public class SpawnVanillaIntegration {
 
     public static void addResourcePacks() {
         ModContainer modContainer = FabricLoader.getInstance().getModContainer(MOD_ID).orElseThrow(() -> new IllegalStateException("Spawn's ModContainer couldn't be found!"));
-        ResourceManagerHelper.registerBuiltinResourcePack(new ResourceLocation(MOD_ID, "animal_tweaks"), modContainer, "Animal Tweaks", ResourcePackActivationType.DEFAULT_ENABLED);
+        ResourceManagerHelper.registerBuiltinResourcePack(new ResourceLocation(MOD_ID, "animation_tweaks"), modContainer, "Animation Tweaks", ResourcePackActivationType.DEFAULT_ENABLED);
+        ResourceManagerHelper.registerBuiltinResourcePack(new ResourceLocation(MOD_ID, "model_tweaks"), modContainer, "Model Tweaks", ResourcePackActivationType.NORMAL);
     }
 
     private static void registerBiomeModifications() {
