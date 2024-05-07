@@ -43,24 +43,24 @@ public class ParrotRemodel extends ParrotModel {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
 
-        PartDefinition right_wing = partdefinition.addOrReplaceChild("right_wing", CubeListBuilder.create().texOffs(24, -3).mirror().addBox(0.0F, 0.0F, -1.5F, 0.0F, 5.0F, 3.0F).mirror(false), PartPose.offsetAndRotation(-1.5F, 19.5F, 0.0F, 0.7854F, -0.1745F, 0.1745F));
+        PartDefinition right_wing = partdefinition.addOrReplaceChild("right_wing", CubeListBuilder.create().texOffs(22, -4).addBox(0.0F, 0.0F, -2.0F, 0.0F, 6.0F, 4.0F), PartPose.offsetAndRotation(-1.5F, 16.5F, 1.0F, 0.0F, 0.0F, 0.1745F));
 
-        PartDefinition left_wing = partdefinition.addOrReplaceChild("left_wing", CubeListBuilder.create().texOffs(24, -3).addBox(0.0F, 0.0F, -1.5F, 0.0F, 5.0F, 3.0F), PartPose.offsetAndRotation(1.5F, 19.5F, 0.0F, 0.7854F, 0.1745F, -0.1745F));
+        PartDefinition left_wing = partdefinition.addOrReplaceChild("left_wing", CubeListBuilder.create().texOffs(22, -4).mirror().addBox(0.0F, 0.0F, -2.0F, 0.0F, 6.0F, 4.0F).mirror(false), PartPose.offsetAndRotation(1.5F, 16.5F, 1.0F, 0.0F, 0.0F, -0.1745F));
 
-        PartDefinition right_leg = partdefinition.addOrReplaceChild("right_leg", CubeListBuilder.create().texOffs(0, 0).addBox(-0.5F, -0.5F, -1.0F, 1.0F, 2.0F, 1.0F), PartPose.offset(-1.0F, 22.5F, 0.0F));
+        PartDefinition right_leg = partdefinition.addOrReplaceChild("right_leg", CubeListBuilder.create().texOffs(0, 0).mirror().addBox(-0.5F, 0.0F, -1.0F, 1.0F, 2.0F, 1.0F).mirror(false), PartPose.offset(-1.0F, 22.0F, 0.0F));
 
-        PartDefinition tail = partdefinition.addOrReplaceChild("tail", CubeListBuilder.create().texOffs(12, 0).addBox(-1.0F, -0.5F, 0.0F, 2.0F, 1.0F, 3.0F), PartPose.offset(0.0F, 21.5F, 1.5F));
+        PartDefinition tail = partdefinition.addOrReplaceChild("tail", CubeListBuilder.create().texOffs(0, 11).addBox(-1.0F, -0.5F, 0.0F, 2.0F, 1.0F, 4.0F), PartPose.offsetAndRotation(0.0F, 21.5F, 2.0F, -0.5236F, 0.0F, 0.0F));
 
-        PartDefinition left_leg = partdefinition.addOrReplaceChild("left_leg", CubeListBuilder.create().texOffs(0, 0).addBox(-0.5F, -0.5F, -1.0F, 1.0F, 2.0F, 1.0F), PartPose.offset(1.0F, 22.5F, 0.0F));
+        PartDefinition left_leg = partdefinition.addOrReplaceChild("left_leg", CubeListBuilder.create().texOffs(0, 0).addBox(-0.5F, 0.0F, -1.0F, 1.0F, 2.0F, 1.0F), PartPose.offset(1.0F, 22.0F, 0.0F));
 
-        PartDefinition body = partdefinition.addOrReplaceChild("body", CubeListBuilder.create().texOffs(0, 7).addBox(-1.5F, 0.0F, -1.5F, 3.0F, 4.0F, 3.0F), PartPose.offset(0.0F, 18.5F, 0.0F));
+        PartDefinition body = partdefinition.addOrReplaceChild("body", CubeListBuilder.create().texOffs(0, 0).addBox(-1.5F, 0.0F, -2.0F, 3.0F, 6.0F, 4.0F), PartPose.offset(0.0F, 16.0F, 0.0F));
 
-        PartDefinition head = partdefinition.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 0).addBox(-2.0F, -3.0F, -2.0F, 4.0F, 3.0F, 4.0F)
-                .texOffs(12, 10).addBox(-1.5F, -2.0F, -4.0F, 3.0F, 2.0F, 2.0F)
-                .texOffs(16, 4).addBox(-1.5F, 0.0F, -4.0F, 3.0F, 1.0F, 1.0F)
-                .texOffs(9, 7).addBox(-2.0F, -3.0F, -4.0F, 4.0F, 1.0F, 2.0F), PartPose.offset(0.0F, 18.5F, 0.0F));
+        PartDefinition head = partdefinition.addOrReplaceChild("head", CubeListBuilder.create().texOffs(10, 6).addBox(-2.0F, -3.0F, -2.0F, 4.0F, 3.0F, 4.0F)
+                .texOffs(22, 6).addBox(-1.5F, -2.0F, -4.0F, 3.0F, 2.0F, 2.0F)
+                .texOffs(24, 14).addBox(-1.5F, 0.0F, -4.0F, 3.0F, 1.0F, 1.0F)
+                .texOffs(12, 13).addBox(-2.0F, -3.0F, -4.0F, 4.0F, 1.0F, 2.0F), PartPose.offset(0.0F, 16.0F, 0.0F));
 
-        PartDefinition feather = head.addOrReplaceChild("feather", CubeListBuilder.create().texOffs(21, 3).addBox(0.0F, -3.0F, -0.5F, 0.0F, 4.0F, 3.0F), PartPose.offset(0.0F, -3.0F, 0.5F));
+        PartDefinition feather = head.addOrReplaceChild("feather", CubeListBuilder.create().texOffs(10, -4).addBox(0.0F, -4.0F, 0.0F, 0.0F, 4.0F, 4.0F), PartPose.offset(0.0F, -3.0F, -1.0F));
 
         return LayerDefinition.create(meshdefinition, 32, 16);
     }
@@ -90,11 +90,12 @@ public class ParrotRemodel extends ParrotModel {
         switch (state) {
             case SITTING: {
 
-                head.y = 20f;
-                body.y = 20f;
-                tail.y = 22.5f;
-                rightWing.y = 21F;
-                leftWing.y = 21F;
+                head.y = 18;
+                body.y = 18;
+                tail.y = 23.5f;
+                rightWing.y = 18;
+                leftWing.y = 18;
+                tail.xRot = 0.4f;
 
                 leftLeg.y = 24F;
                 leftLeg.z = -1.5F;
@@ -108,20 +109,20 @@ public class ParrotRemodel extends ParrotModel {
                 float l = Mth.cos(i);
                 float m = Mth.sin(i);
                 head.x = l;
-                head.y = 18 + m;
+                head.y = 16 + m;
                 head.xRot = -pi/6;
                 head.yRot = 0.0f;
                 head.zRot = Mth.sin(i) * 0.4f;
                 body.x = l;
-                body.y = 18 + m;
-                leftWing.zRot = -animationProgress;
+                body.y = 16 + m;
+                leftWing.zRot = -0.25F;
                 leftWing.x = 2 + l;
-                leftWing.y = 19 + m;
-                rightWing.zRot = animationProgress;
+                leftWing.y = 17 + m;
+                rightWing.zRot = 0.25F;
                 rightWing.x = -2 + l;
-                rightWing.y = 19 + m;
+                rightWing.y = 17 + m;
                 tail.x = l;
-                tail.y = 22 + m;
+                tail.y = 21 + m;
                 leftLeg.y = 22 + m;
                 rightLeg.y = 22 + m;
                 leftLeg.x = 1 + l;
