@@ -1,6 +1,6 @@
 
 
-* This tweak enables a new parrot model with new animations and textures.
+* This tweak enables a new bat model with new animations and textures.
 
 
 

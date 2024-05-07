@@ -21,6 +21,7 @@
     "accessor.TropicalFishAccessor"
   ],
   "client": [
+    "client.BatRendererMixin",
     "client.BlockEntityWithoutLevelRendererMixin",
     "client.ParrotOnShoulderLayerMixin",
     "client.ParrotRendererMixin",
