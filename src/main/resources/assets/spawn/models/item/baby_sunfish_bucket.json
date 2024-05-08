@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "spawn:item/baby_sunfish_bucket"
+    "layer0": "spawn:item/newborn_sunfish_bucket"
   },
   "overrides": [
     {

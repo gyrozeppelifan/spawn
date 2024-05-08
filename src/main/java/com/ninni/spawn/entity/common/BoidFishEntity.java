@@ -26,6 +26,7 @@ public abstract class BoidFishEntity extends AbstractFish {
     public BoidFishEntity leader;
     public List<BoidFishEntity> ownSchool = new ArrayList<>();
     private int maxSchoolSize;
+    public int cantSwimTimer = 40;
     public int cantFollowTimer;
 
     public BoidFishEntity(EntityType<? extends AbstractFish> entityType, Level level) {
@@ -73,6 +74,7 @@ public abstract class BoidFishEntity extends AbstractFish {
 
     private void addToOwnSchoolFollower(BoidFishEntity entity) {
         if (entity.cantFollowTimer == 0) this.ownSchool.add(entity);
+        if (entity.cantSwimTimer > 0) this.cantSwimTimer--;
     }
 
     private void removeFollowerFromOwnSchool(BoidFishEntity entity) {
@@ -104,27 +106,6 @@ public abstract class BoidFishEntity extends AbstractFish {
         return this.distanceToSqr(this.leader) <= 200.0;
     }
 
-    @Override
-    @Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, @Nullable SpawnGroupData spawnGroupData, @Nullable CompoundTag compoundTag) {
-        super.finalizeSpawn(serverLevelAccessor, difficultyInstance, mobSpawnType, spawnGroupData, compoundTag);
-        if (spawnGroupData == null) {
-            spawnGroupData = new BoidFishEntity.SchoolSpawnGroupData(this);
-        } else {
-            this.startFollowing(((BoidFishEntity.SchoolSpawnGroupData)spawnGroupData).leader);
-        }
-        return spawnGroupData;
-    }
-
-    public static class SchoolSpawnGroupData
-            implements SpawnGroupData {
-        public final BoidFishEntity leader;
-
-        public SchoolSpawnGroupData(BoidFishEntity boidFish) {
-            this.leader = boidFish;
-        }
-    }
-
     static class FishSwimGoal extends RandomSwimmingGoal {
         private final BoidFishEntity fish;
 
@@ -135,7 +116,7 @@ public abstract class BoidFishEntity extends AbstractFish {
 
         @Override
         public boolean canUse() {
-            return !this.fish.isFollower() && !this.fish.hasFollowers() && super.canUse();
+            return !this.fish.isFollower() && !this.fish.hasFollowers() && fish.cantSwimTimer == 0 && super.canUse();
         }
     }
 }

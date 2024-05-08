@@ -58,18 +58,24 @@ public class SunfishModel extends HierarchicalModel<Sunfish> {
             }
             else this.animate(entity.landAnimationState, SunfishAnimation.LAND, animationProgress, 1.0f);
         } else {
-            if (!entity.isInWaterOrBubble()) this.all.zRot = pi/2;
-            else this.all.zRot = 0;
-            this.all.y = Mth.sin(animationProgress * 0.2F) * 1.5F * 0.5F + (entity.getSunfishAge() == -2 ? 22.5F : 19.0F);
-            this.all.yRot = Mth.cos(animationProgress * 0.2F) * 0.4F * 0.25F;
+            if (!entity.isInWaterOrBubble()) {
+                this.all.y = (entity.getSunfishAge() == -2 ? 22.5F : 22.0F);
+                this.all.zRot = pi/2;
+                this.all.xRot = 0;
+                this.all.yRot = 0;
+            }
+            else {
+                this.all.zRot = 0;
+                this.all.xRot = headPitch * (float) (Math.PI / 180);
+                this.all.yRot = headYaw * (float) (Math.PI / 180);
+            }
+            this.all.y += Mth.sin(animationProgress * 0.2F) * 1.5F * 0.5F;
+            this.all.yRot += Mth.cos(animationProgress * 0.2F) * 0.4F * 0.25F;
             this.tailFin.yRot = Mth.cos(animationProgress * 0.4F) * 0.8F * 0.25F;
             this.leftFin.yRot = Mth.cos(animationProgress * 0.4F) * 0.8F * 0.25F + 0.8F;
             this.rightFin.yRot = Mth.cos(animationProgress * 0.4F + pi) * 0.8F * 0.25F - 0.8F;
             this.topFin.zRot = Mth.cos(animationProgress * 0.4F) * 1.6F * 0.25F;
             this.bottomFin.zRot = Mth.cos(animationProgress * 0.4F + pi) * 1.6F * 0.25F;
-
-            this.all.xRot += headPitch * (float) (Math.PI / 180);
-            this.all.yRot += headYaw * (float) (Math.PI / 180);
         }
     }
 

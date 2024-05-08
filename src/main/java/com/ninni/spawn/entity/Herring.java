@@ -83,6 +83,12 @@ public class Herring extends BoidFishEntity {
 
 
     @Override
+    public int getMaxSpawnClusterSize() {
+        return 20;
+    }
+
+
+    @Override
     public int getMaxSchoolSize() {
         return this.getSchoolSize();
     }

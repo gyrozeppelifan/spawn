@@ -463,6 +463,7 @@ public class Sunfish extends PathfinderMob implements Bucketable, VariantHolder<
     @Override
     public void loadFromBucketTag(CompoundTag compoundTag) {
         if (compoundTag.contains("Age")) this.setAge(compoundTag.getInt("Age"));
+        else this.setAge(-48000);
         if (compoundTag.contains("Variant")) this.setVariant(Variant.byId(compoundTag.getInt("Variant")));
         Bucketable.loadDefaultDataFromBucketTag(this, compoundTag);
     }

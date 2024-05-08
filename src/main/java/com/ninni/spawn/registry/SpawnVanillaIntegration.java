@@ -174,7 +174,7 @@ public class SpawnVanillaIntegration {
                     if (a < -24000) return 0f;
                     else return 1f;
                 }
-                return 1f;
+                return 0f;
             });
 
             ItemProperties.register(SpawnItems.CLAM_CASE, new ResourceLocation("filled"), (itemStack, clientLevel, livingEntity, i) -> ClamCaseItem.getFullnessDisplay(itemStack));
