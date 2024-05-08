@@ -16,14 +16,14 @@ import static com.ninni.spawn.Spawn.MOD_ID;
 
 @Environment(value= EnvType.CLIENT)
 public class SeahorsePatternLayer extends RenderLayer<Seahorse, SeahorseModel<Seahorse>> {
-    private static final ResourceLocation RIDGED = new ResourceLocation(MOD_ID, "textures/entity/fish/seahorse_a_pattern_1.png");
-    private static final ResourceLocation SHARP = new ResourceLocation(MOD_ID, "textures/entity/fish/seahorse_a_pattern_2.png");
-    private static final ResourceLocation HOODED = new ResourceLocation(MOD_ID, "textures/entity/fish/seahorse_a_pattern_3.png");
-    private static final ResourceLocation SPOTTED = new ResourceLocation(MOD_ID, "textures/entity/fish/seahorse_a_pattern_4.png");
-    private static final ResourceLocation BANDED = new ResourceLocation(MOD_ID, "textures/entity/fish/seahorse_b_pattern_1.png");
-    private static final ResourceLocation WAVY = new ResourceLocation(MOD_ID, "textures/entity/fish/seahorse_b_pattern_2.png");
-    private static final ResourceLocation RIBBED = new ResourceLocation(MOD_ID, "textures/entity/fish/seahorse_b_pattern_3.png");
-    private static final ResourceLocation CURLED = new ResourceLocation(MOD_ID, "textures/entity/fish/seahorse_b_pattern_4.png");
+    private static final ResourceLocation RIDGED = new ResourceLocation(MOD_ID, "textures/entity/seahorse/seahorse_a_pattern_1.png");
+    private static final ResourceLocation SHARP = new ResourceLocation(MOD_ID, "textures/entity/seahorse/seahorse_a_pattern_2.png");
+    private static final ResourceLocation HOODED = new ResourceLocation(MOD_ID, "textures/entity/seahorse/seahorse_a_pattern_3.png");
+    private static final ResourceLocation SPOTTED = new ResourceLocation(MOD_ID, "textures/entity/seahorse/seahorse_a_pattern_4.png");
+    private static final ResourceLocation BANDED = new ResourceLocation(MOD_ID, "textures/entity/seahorse/seahorse_b_pattern_1.png");
+    private static final ResourceLocation WAVY = new ResourceLocation(MOD_ID, "textures/entity/seahorse/seahorse_b_pattern_2.png");
+    private static final ResourceLocation RIBBED = new ResourceLocation(MOD_ID, "textures/entity/seahorse/seahorse_b_pattern_3.png");
+    private static final ResourceLocation CURLED = new ResourceLocation(MOD_ID, "textures/entity/seahorse/seahorse_b_pattern_4.png");
     private final SeahorseModel<Seahorse> modelA;
     private final SeahorseModel<Seahorse> modelB;
 

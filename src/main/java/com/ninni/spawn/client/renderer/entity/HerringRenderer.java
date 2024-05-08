@@ -16,7 +16,7 @@ import static com.ninni.spawn.Spawn.MOD_ID;
 
 @Environment(value=EnvType.CLIENT)
 public class HerringRenderer extends MobRenderer<Herring, HerringModel<Herring>> {
-    private static final ResourceLocation HERRING_LOCATION = new ResourceLocation(MOD_ID,"textures/entity/fish/herring.png");
+    private static final ResourceLocation HERRING_LOCATION = new ResourceLocation(MOD_ID,"textures/entity/herring/herring.png");
 
     public HerringRenderer(EntityRendererProvider.Context context) {
         super(context, new HerringModel<>(context.bakeLayer(SpawnEntityModelLayers.HERRING)), 0.2f);

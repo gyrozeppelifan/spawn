@@ -18,8 +18,8 @@ import static com.ninni.spawn.Spawn.MOD_ID;
 public class SeahorseRenderer extends MobRenderer<Seahorse, SeahorseModel<Seahorse>> {
     private final SeahorseModel<Seahorse> modelA = this.getModel();
     private final SeahorseModel<Seahorse> modelB;
-    private static final ResourceLocation MODEL_A_TEXTURE = new ResourceLocation(MOD_ID,"textures/entity/fish/seahorse_a.png");
-    private static final ResourceLocation MODEL_B_TEXTURE = new ResourceLocation(MOD_ID,"textures/entity/fish/seahorse_b.png");
+    private static final ResourceLocation MODEL_A_TEXTURE = new ResourceLocation(MOD_ID,"textures/entity/seahorse/seahorse_a.png");
+    private static final ResourceLocation MODEL_B_TEXTURE = new ResourceLocation(MOD_ID,"textures/entity/seahorse/seahorse_b.png");
 
     public SeahorseRenderer(EntityRendererProvider.Context context) {
         super(context, new SeahorseModel<>(context.bakeLayer(SpawnEntityModelLayers.SEAHORSE_SMALL)), 0.2F);
