@@ -25,6 +25,8 @@ public abstract class BoidFishEntity extends AbstractFish {
     @Nullable
     public BoidFishEntity leader;
     public List<BoidFishEntity> ownSchool = new ArrayList<>();
+    private int maxSchoolSize;
+    public int cantFollowTimer;
 
     public BoidFishEntity(EntityType<? extends AbstractFish> entityType, Level level) {
         super(entityType, level);
@@ -35,17 +37,15 @@ public abstract class BoidFishEntity extends AbstractFish {
         this.goalSelector.addGoal(4, new FishSwimGoal(this));
         this.goalSelector.addGoal(5, new BoidFishSchoolingGoal(this, 0.2f, 0.4f, 8 / 20f, 1 / 20f));
         this.goalSelector.addGoal(3, new HeightBoundsGoal(this));
-        this.goalSelector.addGoal(2, new LimitSpeedAndLookInVelocityDirectionGoal(this, 0.3f, 0.4f));
+        this.goalSelector.addGoal(2, new LimitSpeedAndLookInVelocityDirectionGoal(this, 0.65f));
         this.goalSelector.addGoal(5, new OrganizeBoidSchoolingGoal(this));
     }
 
-    @Override
-    public int getMaxSpawnClusterSize() {
-        return this.getMaxSchoolSize();
-    }
-
     public int getMaxSchoolSize() {
-        return super.getMaxSpawnClusterSize();
+        return maxSchoolSize;
+    }
+    public void SetMaxSchoolSize(int i) {
+        this.maxSchoolSize = i;
     }
 
     public boolean isFollower() {
@@ -53,8 +53,10 @@ public abstract class BoidFishEntity extends AbstractFish {
     }
 
     public void startFollowing(BoidFishEntity abstractSchoolingFish) {
-        this.leader = abstractSchoolingFish;
-        abstractSchoolingFish.addToOwnSchoolFollower(this);
+        if (this.cantFollowTimer == 0) {
+            this.leader = abstractSchoolingFish;
+            abstractSchoolingFish.addToOwnSchoolFollower(this);
+        }
     }
 
     public void stopFollowing() {
@@ -70,7 +72,7 @@ public abstract class BoidFishEntity extends AbstractFish {
     }
 
     private void addToOwnSchoolFollower(BoidFishEntity entity) {
-        this.ownSchool.add(entity);
+        if (entity.cantFollowTimer == 0) this.ownSchool.add(entity);
     }
 
     private void removeFollowerFromOwnSchool(BoidFishEntity entity) {
@@ -78,12 +80,16 @@ public abstract class BoidFishEntity extends AbstractFish {
     }
 
     public boolean canBeFollowed() {
-        return this.hasFollowers() && this.ownSchool.size() < this.getMaxSchoolSize();
+        return this.hasFollowers() && this.ownSchool.size() < this.getMaxSchoolSize() && this.cantFollowTimer == 0;
     }
 
     @Override
     public void tick() {
         super.tick();
+        if (this.cantFollowTimer > 0) {
+            this.cantFollowTimer--;
+            this.stopFollowing();
+        }
     }
 
     public boolean hasFollowers() {
@@ -95,7 +101,7 @@ public abstract class BoidFishEntity extends AbstractFish {
     }
 
     public boolean inRangeOfLeader() {
-        return this.distanceToSqr(this.leader) <= 121.0;
+        return this.distanceToSqr(this.leader) <= 200.0;
     }
 
     @Override

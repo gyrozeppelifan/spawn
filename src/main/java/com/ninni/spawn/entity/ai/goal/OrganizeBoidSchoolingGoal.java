@@ -24,12 +24,10 @@ public class OrganizeBoidSchoolingGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        if (this.fish.hasFollowers()) {
-            return false;
-        }
-        if (this.fish.isFollower()) {
-            return true;
-        }
+        if (this.fish.hasFollowers()) return false;
+
+        if (this.fish.isFollower()) return true;
+
         if (this.nextStartTick > 0) {
             --this.nextStartTick;
             return false;

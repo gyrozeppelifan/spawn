@@ -11,13 +11,11 @@ import net.minecraft.world.entity.ai.goal.Goal;
 
 public class LimitSpeedAndLookInVelocityDirectionGoal extends Goal {
     private final BoidFishEntity mob;
-    private final float minSpeed;
-    private final float maxSpeed;
+    private final float speed;
 
-    public LimitSpeedAndLookInVelocityDirectionGoal(BoidFishEntity mob, float minSpeed, float maxSpeed) {
+    public LimitSpeedAndLookInVelocityDirectionGoal(BoidFishEntity mob, float speed) {
         this.mob = mob;
-        this.minSpeed = minSpeed;
-        this.maxSpeed = maxSpeed;
+        this.speed = speed;
     }
 
     @Override
@@ -27,14 +25,7 @@ public class LimitSpeedAndLookInVelocityDirectionGoal extends Goal {
 
     @Override
     public void tick() {
-        var velocity = mob.getDeltaMovement();
-        var speed = velocity.length();
-
-        if (speed < minSpeed)
-            velocity = velocity.normalize().scale(minSpeed);
-        if (speed > maxSpeed)
-            velocity = velocity.normalize().scale(maxSpeed);
-
+        var velocity = mob.getDeltaMovement().normalize().scale(0.2).scale(speed);
         mob.setDeltaMovement(velocity);
         mob.lookAt(EntityAnchorArgument.Anchor.EYES, mob.position().add(velocity.scale(3)));
     }

@@ -31,20 +31,13 @@ public class HeightBoundsGoal extends Goal {
     }
 
     public Vec3 bounds() {
-        var amount = 0.1;
+        var yAmount = 0.1;
         var dY = Mth.abs((float) mob.getDeltaMovement().y);
 
-        if (dY > amount) {
-            amount = dY;
-        }
+        if (dY > yAmount) yAmount = dY;
 
-
-
-        if (this.isTooHigh()) {
-            return new Vec3(0, -amount, 0);
-        }
-        if (this.isTooLow())
-            return new Vec3(0, amount, 0);
+        if (this.isTooHigh()) return new Vec3(0, -yAmount, 0);
+        if (this.isTooLow()) return new Vec3(0, yAmount, 0);
 
         return Vec3.ZERO;
     }

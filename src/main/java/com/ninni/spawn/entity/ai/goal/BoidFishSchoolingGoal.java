@@ -17,6 +17,7 @@ public class BoidFishSchoolingGoal extends Goal {
     public final float alignmentInfluence;
     public final float cohesionInfluence;
     private final BoidFishEntity mob;
+    private int timer = 0;
 
     public BoidFishSchoolingGoal(BoidFishEntity mob, float separationInfluence, float separationRange, float alignmentInfluence, float cohesionInfluence) {
         this.mob = mob;
@@ -28,12 +29,15 @@ public class BoidFishSchoolingGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        return mob.isInWaterOrBubble() && (mob.isFollower() || mob.hasFollowers());
+        return mob.isInWaterOrBubble() && (mob.isFollower() || mob.hasFollowers()) && mob.cantFollowTimer == 0;
     }
 
     public void tick() {
-        mob.addDeltaMovement(separation());
+        if (mob.horizontalCollision) timer++;
+        if (timer > 60) mob.cantFollowTimer = 60;
+
         mob.addDeltaMovement(random());
+        mob.addDeltaMovement(separation());
         mob.addDeltaMovement(cohesion());
         mob.addDeltaMovement(alignment());
     }
@@ -41,20 +45,14 @@ public class BoidFishSchoolingGoal extends Goal {
     public Vec3 random() {
         var velocity = mob.getDeltaMovement();
 
-        if (Mth.abs((float) velocity.x) < 0.1 && Mth.abs((float) velocity.z) < 0.1)
-            return new Vec3(randomSign() * 0.2, 0, randomSign() * 0.2);
+        if (Mth.abs((float) velocity.x) < 0.1 && Mth.abs((float) velocity.z) < 0.1 && mob.hasFollowers())
+            return new Vec3(randomSign() * 0.4, 0, randomSign() * 0.4);
 
         return Vec3.ZERO;
     }
 
     public int randomSign() {
-        var isNegative = mob.getRandom().nextBoolean();
-
-        if (isNegative) {
-            return -1;
-        }
-
-        return 1;
+        return mob.getRandom().nextBoolean() ? -1 : 1;
     }
 
     public Vec3 separation() {
