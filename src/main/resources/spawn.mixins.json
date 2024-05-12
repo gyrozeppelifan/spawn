@@ -15,6 +15,7 @@
     "OverworldBiomeBuilderMixin",
     "PlayerMixin",
     "PoseMixin",
+    "RabbitMixin",
     "ServerPlayerMixin",
     "accessor.NoiseGeneratorSettingsAccessor",
     "accessor.PlayerAccessor",
