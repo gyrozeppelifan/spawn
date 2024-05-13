@@ -25,16 +25,17 @@ import net.minecraft.world.level.Level;
 import java.util.Optional;
 
 public class PigmentShifterMenu extends AbstractContainerMenu {
-    private Optional<Seahorse.Pattern> optional = Optional.empty();
     private final Level level;
     private final ContainerLevelAccess access;
     final Slot bodyDyeSlot;
     final Slot patternDyeSlot;
+    final Slot patternSlot;
+    final Slot bodyPlanSlot;
     final Slot bucketSlot;
     final Slot resultSlot;
     long lastSoundTime;
 
-    public final Container inputContainer = new SimpleContainer(4) {
+    public final Container inputContainer = new SimpleContainer(5) {
         @Override
         public void setChanged() {
             PigmentShifterMenu.this.slotsChanged(this);
@@ -77,6 +78,18 @@ public class PigmentShifterMenu extends AbstractContainerMenu {
                 return itemStack.getItem() instanceof DyeItem;
             }
         });
+        this.bodyPlanSlot = this.addSlot(new Slot(this.inputContainer, 3, 38, 26){
+            @Override
+            public boolean mayPlace(ItemStack itemStack) {
+                return itemStack.is(Items.SLIME_BALL);
+            }
+        });
+        this.patternSlot = this.addSlot(new Slot(this.inputContainer, 4, 38, 45){
+            @Override
+            public boolean mayPlace(ItemStack itemStack) {
+                return itemStack.is(Items.SLIME_BALL);
+            }
+        });
         this.resultSlot = this.addSlot(new Slot(this.outputContainer, 0, 145, 35){
 
             @Override
@@ -89,6 +102,8 @@ public class PigmentShifterMenu extends AbstractContainerMenu {
                 PigmentShifterMenu.this.bucketSlot.remove(1);
                 PigmentShifterMenu.this.bodyDyeSlot.remove(1);
                 PigmentShifterMenu.this.patternDyeSlot.remove(1);
+                PigmentShifterMenu.this.bodyPlanSlot.remove(1);
+                PigmentShifterMenu.this.patternSlot.remove(1);
 
                 containerLevelAccess.execute((level, blockPos) -> {
                     long l = level.getGameTime();
@@ -130,16 +145,16 @@ public class PigmentShifterMenu extends AbstractContainerMenu {
                     resultCopy.setCount(1);
                     int tag = bucketSlotItem.getTag().getInt("BucketVariantTag");
 
-                    if (resultCopy.is(SpawnItems.SEAHORSE_BUCKET)) {
+                    if (bucketSlotItem.is(SpawnItems.SEAHORSE_BUCKET)) {
                         DyeColor bodyColor = Seahorse.getBaseColor(tag);
                         DyeColor patternColor = Seahorse.getPatternColor(tag);
-
+                        Seahorse.Pattern pattern = Seahorse.getPattern(tag);
+                        int shiftedId = getSeahorsePattern(pattern);
+                        Seahorse.Pattern newPattern = Seahorse.Pattern.byId(shiftedId);
                         if (bodyDyeSlotItem.getItem() instanceof DyeItem dyeItem) bodyColor = dyeItem.getDyeColor();
-                        if (patternDyeSlotItem.getItem() instanceof DyeItem dyeItem)
-                            patternColor = dyeItem.getDyeColor();
+                        if (patternDyeSlotItem.getItem() instanceof DyeItem dyeItem) patternColor = dyeItem.getDyeColor();
+                        if ((this.patternSlot.getItem().is(Items.SLIME_BALL) || this.bodyPlanSlot.getItem().is(Items.SLIME_BALL)) && newPattern != null) pattern = newPattern;
 
-
-                        Seahorse.Pattern pattern = this.optional.isPresent() ? this.optional.get() : Seahorse.getPattern(tag);
                         Seahorse.Variant variant = new Seahorse.Variant(pattern, bodyColor, patternColor);
                         Seahorse seahorse = SpawnEntityType.SpawnFish.SEAHORSE.create(this.level);
                         seahorse.setPackedVariant(variant.getPackedId());
@@ -147,22 +162,23 @@ public class PigmentShifterMenu extends AbstractContainerMenu {
                         seahorse.discard();
                     }
 
-                    if (resultCopy.is(Items.TROPICAL_FISH_BUCKET)) {
+                    if (bucketSlotItem.is(Items.TROPICAL_FISH_BUCKET)) {
                         DyeColor bodyColor = TropicalFish.getBaseColor(tag);
                         DyeColor patternColor = TropicalFish.getPatternColor(tag);
+                        TropicalFish.Pattern pattern = TropicalFish.getPattern(tag);
+                        int shiftedId = getTropicalFishPattern(pattern);
+                        TropicalFish.Pattern newPattern = TropicalFish.Pattern.byId(shiftedId);
 
                         if (bodyDyeSlotItem.getItem() instanceof DyeItem dyeItem) bodyColor = dyeItem.getDyeColor();
-                        if (patternDyeSlotItem.getItem() instanceof DyeItem dyeItem)
-                            patternColor = dyeItem.getDyeColor();
+                        if (patternDyeSlotItem.getItem() instanceof DyeItem dyeItem) patternColor = dyeItem.getDyeColor();
+                        if ((this.patternSlot.getItem().is(Items.SLIME_BALL) || this.bodyPlanSlot.getItem().is(Items.SLIME_BALL)) && newPattern != null) pattern = newPattern;
 
-
-                        TropicalFish.Variant variant = new TropicalFish.Variant(TropicalFish.getPattern(tag), bodyColor, patternColor);
+                        TropicalFish.Variant variant = new TropicalFish.Variant(pattern, bodyColor, patternColor);
                         TropicalFish tropicalFish = EntityType.TROPICAL_FISH.create(this.level);
                         ((TropicalFishAccessor) tropicalFish).callSetPackedVariant(variant.getPackedId());
                         resultCopy.getOrCreateTag().putInt("BucketVariantTag", ((TropicalFishAccessor) tropicalFish).callGetPackedVariant());
                         tropicalFish.discard();
                     }
-
                     this.outputContainer.setItem(4, resultCopy);
                 } else {
                     this.outputContainer.removeItemNoUpdate(4);
@@ -175,12 +191,52 @@ public class PigmentShifterMenu extends AbstractContainerMenu {
         }
     }
 
-    public void onButtonClick(Player player, boolean isBodyPlanButton, Optional<Seahorse.Pattern> optional) {
-        if (!isBodyPlanButton) {
-            this.optional = optional;
-            System.out.println(optional.get());
+    private int getSeahorsePattern(Seahorse.Pattern pattern) {
+        Seahorse.Base bodyPlan = pattern.base();
+
+        int i = this.patternSlot.getItem().is(Items.SLIME_BALL) ? 1 : 0;
+        int newId = (pattern.getPackedId() >> 8) + i;
+        int shiftedId = newId << 8;
+
+        if (this.bodyPlanSlot.getItem().is(Items.SLIME_BALL)) {
+            if (bodyPlan == Seahorse.Base.LARGE) {
+                if (pattern.getPackedId() >> 8 == 3 && i == 1) shiftedId = 0;
+            } else {
+                if (pattern.getPackedId() >> 8 == 3 && i == 1) shiftedId = 1;
+                else shiftedId += 1;
+            }
+        } else {
+            if (bodyPlan == Seahorse.Base.LARGE) {
+                if (pattern.getPackedId() >> 8 == 3 && i == 1) shiftedId = 1;
+                else shiftedId += 1;
+            }
         }
+        return shiftedId;
     }
+
+    private int getTropicalFishPattern(TropicalFish.Pattern pattern) {
+        TropicalFish.Base bodyPlan = pattern.base();
+
+        int i = this.patternSlot.getItem().is(Items.SLIME_BALL) ? 1 : 0;
+        int newId = (pattern.getPackedId() >> 8) + i;
+        int shiftedId = newId << 8;
+
+        if (this.bodyPlanSlot.getItem().is(Items.SLIME_BALL)) {
+            if (bodyPlan == TropicalFish.Base.LARGE) {
+                if (pattern.getPackedId() >> 8 == 5 && i == 1) shiftedId = 0;
+            } else {
+                if (pattern.getPackedId() >> 8 == 5 && i == 1) shiftedId = 1;
+                else shiftedId += 1;
+            }
+        } else {
+            if (bodyPlan == TropicalFish.Base.LARGE) {
+                if (pattern.getPackedId() >> 8 == 5 && i == 1) shiftedId = 1;
+                else shiftedId += 1;
+            }
+        }
+        return shiftedId;
+    }
+
 
     @Override
     public void removed(Player player) {

@@ -11,7 +11,6 @@ import com.ninni.spawn.registry.SpawnItems;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
@@ -27,8 +26,11 @@ import net.minecraft.world.entity.animal.TropicalFish;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.inventory.SmithingMenu;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.SmithingTemplateItem;
 import net.minecraft.world.level.Level;
 import org.joml.Quaternionf;
 
@@ -38,18 +40,16 @@ import java.util.Optional;
 @Environment(EnvType.CLIENT)
 public class PigmentShifterScreen extends AbstractContainerScreen<PigmentShifterMenu> {
     private static final ResourceLocation RESOURCE_LOCATION = new ResourceLocation(Spawn.MOD_ID, "textures/gui/container/fish.png");
-    private final List<AbstractButton> buttons = Lists.newArrayList();
+    private static final Component BODY_PLAN_TOOLTIP = Component.translatable("container.spawn.pigment_shifter.body_plan");
+    private static final Component PATTERN_TOOLTIP = Component.translatable("container.spawn.pigment_shifter.pattern");
     private final PigmentShifterMenu menu;
-    private final Player player;
     private final Level level;
-    private Optional<Seahorse.Pattern> optional = Optional.empty();
     private double rotationY = 0;
     private double rotateY = 0;
 
     public PigmentShifterScreen(PigmentShifterMenu customizerMenu, Inventory inventory, Component component) {
         super(customizerMenu, inventory, component);
         this.menu = customizerMenu;
-        this.player = inventory.player;
         this.level = inventory.player.level();
     }
 
@@ -58,19 +58,7 @@ public class PigmentShifterScreen extends AbstractContainerScreen<PigmentShifter
         this.renderBackground(poseStack);
         super.render(poseStack, i, j, f);
         this.renderTooltip(poseStack, i, j);
-    }
-
-    private <T extends AbstractWidget> void addButton(T abstractWidget) {
-        this.addRenderableWidget(abstractWidget);
-        this.buttons.add((AbstractButton)(abstractWidget));
-    }
-
-    @Override
-    protected void init() {
-        super.init();
-        this.buttons.clear();
-        this.addButton(new UpdateBodyPlanButton(this.leftPos + 38, this.topPos + 26));
-        this.addButton(new UpdatePatternButton(this.leftPos + 38, this.topPos + 45));
+        this.renderOnboardingTooltips(poseStack, i, j);
     }
 
     @Override
@@ -85,10 +73,14 @@ public class PigmentShifterScreen extends AbstractContainerScreen<PigmentShifter
         Slot bodyDyeSlot = this.menu.bodyDyeSlot;
         Slot patternDyeSlot = this.menu.patternDyeSlot;
         Slot bucketSlot = this.menu.bucketSlot;
+        Slot patternSlot = this.menu.patternSlot;
+        Slot bodyPlanSlot = this.menu.bodyPlanSlot;
 
         if (!bodyDyeSlot.hasItem()) poseStack.blit(RESOURCE_LOCATION, imgX + bodyDyeSlot.x, imgY + bodyDyeSlot.y, this.imageWidth, 0, 16, 16);
         if (!patternDyeSlot.hasItem()) poseStack.blit(RESOURCE_LOCATION, imgX + patternDyeSlot.x, imgY + patternDyeSlot.y, this.imageWidth, 0, 16, 16);
         if (!bucketSlot.hasItem()) poseStack.blit(RESOURCE_LOCATION, imgX + bucketSlot.x, imgY + bucketSlot.y, this.imageWidth + 16, 0, 16, 16);
+        if (!bodyPlanSlot.hasItem()) poseStack.blit(RESOURCE_LOCATION, imgX + bodyPlanSlot.x, imgY + bodyPlanSlot.y, this.imageWidth + 32, 0, 16, 16);
+        if (!patternSlot.hasItem()) poseStack.blit(RESOURCE_LOCATION, imgX + patternSlot.x, imgY + patternSlot.y, this.imageWidth + 32, 0, 16, 16);
 
 
         if (menu.resultSlot.hasItem() && item.is(SpawnTags.CUSTOMIZABLE_MOB_ITEMS)) {
@@ -103,26 +95,50 @@ public class PigmentShifterScreen extends AbstractContainerScreen<PigmentShifter
                     ((TropicalFishAccessor) tropicalFish).callSetPackedVariant(variant.getPackedId());
 
                     renderMovableEntity(poseStack, imgX + 107, imgY + 54, 40, tropicalFish, true);
+                    tropicalFish.discard();
                 }
 
                 if (item.is(SpawnItems.SEAHORSE_BUCKET)) {
                     int h;
+
                     Seahorse seahorse = SpawnEntityType.SpawnFish.SEAHORSE.create(this.level);
-                    Seahorse.Pattern pattern = this.optional.isPresent() ? this.optional.get() : Seahorse.getPattern(tag);
+                    Seahorse.Pattern pattern = Seahorse.getPattern(tag);
                     Seahorse.Variant variant = new Seahorse.Variant(pattern, Seahorse.getBaseColor(tag), Seahorse.getPatternColor(tag));
                     seahorse.setPackedVariant(variant.getPackedId());
-                    if (pattern.base() == Seahorse.Base.LARGE) {
-                        h = -10;
-                    } else h = 0;
-
+                    if (pattern.base() == Seahorse.Base.LARGE) h = -10;
+                    else h = 0;
                     renderMovableEntity(poseStack, imgX + 107, imgY + 64 + h, 40, seahorse, false);
-
+                    seahorse.discard();
                 }
 
             }
         }
 
     }
+
+    private void renderOnboardingTooltips(GuiGraphics guiGraphics, int i, int j) {
+        Optional<Component> optional = Optional.empty();
+
+        if (this.hoveredSlot != null) {
+            ItemStack itemStack = this.menu.getSlot(this.menu.patternSlot.index).getItem();
+            ItemStack itemStack2 = this.menu.getSlot(this.menu.bodyPlanSlot.index).getItem();
+            if (itemStack.isEmpty()) {
+                if (this.hoveredSlot.index == this.menu.patternSlot.index) {
+                    optional = Optional.of(PATTERN_TOOLTIP);
+                }
+            }
+            if (itemStack2.isEmpty()) {
+                if (this.hoveredSlot.index == this.menu.bodyPlanSlot.index) {
+                    optional = Optional.of(BODY_PLAN_TOOLTIP);
+                }
+            }
+        }
+
+        optional.ifPresent((component) -> {
+            guiGraphics.renderTooltip(this.font, this.font.split(component, 115), i, j);
+        });
+    }
+
 
     public void renderMovableEntity(GuiGraphics poseStack, int x, int y, int scale, LivingEntity entity, boolean rotate) {
         rotationY += rotateY;
@@ -153,72 +169,5 @@ public class PigmentShifterScreen extends AbstractContainerScreen<PigmentShifter
     public boolean mouseReleased(double pMouseX, double pMouseY, int pButton) {
         rotateY = 0.01;
         return super.mouseReleased(pMouseX, pMouseY, pButton);
-    }
-
-
-    @Environment(value=EnvType.CLIENT)
-    class UpdateBodyPlanButton extends AbstractButton {
-        public UpdateBodyPlanButton(int i, int j) {
-            super(i, j, 16, 16, Component.translatable("container.spawn.pigment_shifter.body_plan"));
-        }
-
-        @Override
-        public void onPress() {
-            //FishCustomizerScreen.this.minecraft.getConnection().send(new ServerboundSetBeaconPacket(Optional.ofNullable(FishCustomizerScreen.this.primary), Optional.ofNullable(FishCustomizerScreen.this.secondary)));
-        }
-
-        @Override
-        public void renderWidget(GuiGraphics guiGraphics, int i, int j, float f) {
-            int l = 16;
-            if (this.isHovered()) {
-                l = 32;
-            }
-            this.setTooltip(Tooltip.create(Component.translatable("container.spawn.pigment_shifter.body_plan"), null));
-            guiGraphics.blit(RESOURCE_LOCATION, this.getX(), this.getY(), 176, l, this.width, this.height);
-        }
-
-        @Override
-        public void updateWidgetNarration(NarrationElementOutput narrationElementOutput) {
-            this.defaultButtonNarrationText(narrationElementOutput);
-        }
-    }
-
-    @Environment(value=EnvType.CLIENT)
-    class UpdatePatternButton extends AbstractButton {
-        public UpdatePatternButton(int i, int j) {
-            super(i, j, 16, 16, Component.translatable("container.spawn.pigment_shifter.pattern"));
-        }
-
-        @Override
-        public void onPress() {
-            ItemStack item = menu.resultSlot.getItem();
-            CompoundTag compoundTag = item.getTag();
-            if (compoundTag != null) {
-                int tag = compoundTag.getInt("BucketVariantTag");
-                Seahorse.Pattern pattern = Seahorse.getPattern(tag);
-                int newId = (pattern.getPackedId() >> 8) + 1;
-                int shifted = newId << 8;
-                Seahorse.Pattern newPattern = Seahorse.Pattern.byId(shifted);
-                if (newPattern != null) {
-                    optional = Optional.of(newPattern);
-                }
-            }
-            PigmentShifterScreen.this.menu.onButtonClick(player,false, optional);
-        }
-
-        @Override
-        public void renderWidget(GuiGraphics guiGraphics, int i, int j, float f) {
-            int l = 16;
-            if (this.isHovered()) {
-                l = 32;
-            }
-            this.setTooltip(Tooltip.create(Component.translatable("container.spawn.pigment_shifter.pattern"), null));
-            guiGraphics.blit(RESOURCE_LOCATION, this.getX(), this.getY(), 192, l, this.width, this.height);
-        }
-
-        @Override
-        public void updateWidgetNarration(NarrationElementOutput narrationElementOutput) {
-            this.defaultButtonNarrationText(narrationElementOutput);
-        }
     }
 }

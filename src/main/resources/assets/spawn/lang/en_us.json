@@ -173,8 +173,8 @@
   "block.spawn.clam_launcher": "Clam Launcher",
   "block.spawn.pigment_shifter": "Pigment Shifter",
   "container.spawn.pigment_shifter": "Customize",
-  "container.spawn.pigment_shifter.body_plan": "Change Body Plan",
-  "container.spawn.pigment_shifter.pattern": "Change Pattern",
+  "container.spawn.pigment_shifter.body_plan": "Cycle Body Plan",
+  "container.spawn.pigment_shifter.pattern": "Cycle Pattern",
 
   "entity.spawn.sea_cow": "Sea Cow",
   "item.spawn.sea_cow_spawn_egg": "Sea Cow Spawn Egg",
