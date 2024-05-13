@@ -121,7 +121,7 @@ public class PigmentShifterScreen extends AbstractContainerScreen<PigmentShifter
                     tropicalFish.noPhysics = true;
                     TropicalFish.Variant variant = new TropicalFish.Variant(TropicalFish.getPattern(tag), TropicalFish.getBaseColor(tag), TropicalFish.getPatternColor(tag));
                     ((TropicalFishAccessor) tropicalFish).callSetPackedVariant(variant.getPackedId());
-                    renderMovableEntity(poseStack, imgX + 107, imgY + 54, 40, tropicalFish, 1);
+                    renderMovableEntity(poseStack, imgX + 107, imgY + 50, 40, tropicalFish, 1);
                     tropicalFish.discard();
                 }
 
