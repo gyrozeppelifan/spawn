@@ -21,6 +21,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.TropicalFish;
+import net.minecraft.world.entity.animal.axolotl.Axolotl;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
@@ -102,6 +103,16 @@ public class PigmentShifterScreen extends AbstractContainerScreen<PigmentShifter
                 clam.discard();
             }
 
+            if (compoundTag != null && compoundTag.contains("Variant", 3) && item.is(Items.AXOLOTL_BUCKET) && compoundTag.getInt("Variant") != 4) {
+                int variant = compoundTag.getInt("Variant");
+
+                Axolotl axolotl = EntityType.AXOLOTL.create(this.level);
+                axolotl.noPhysics = true;
+                axolotl.setVariant(Axolotl.Variant.byId(variant));
+                renderMovableEntity(poseStack, imgX + 107, imgY + 60, 30, axolotl, 0);
+                axolotl.discard();
+            }
+
             if (compoundTag != null && compoundTag.contains("BucketVariantTag", 3)) {
                 int tag = compoundTag.getInt("BucketVariantTag");
 
@@ -144,7 +155,7 @@ public class PigmentShifterScreen extends AbstractContainerScreen<PigmentShifter
             }
             if (this.menu.getSlot(this.menu.bodyPlanSlot.index).getItem().isEmpty() && !((PigmentShifterSlot)this.menu.bodyPlanSlot).isDisabled()) {
                 if (this.hoveredSlot.index == this.menu.bodyPlanSlot.index) {
-                    if (this.menu.bucketSlot.getItem().is(SpawnItems.CLAM)) optional = Optional.of(BODY_PLAN_TOOLTIP_PRESET_COLOR);
+                    if (this.menu.bucketSlot.getItem().is(SpawnItems.CLAM) || this.menu.bucketSlot.getItem().is(Items.AXOLOTL_BUCKET)) optional = Optional.of(BODY_PLAN_TOOLTIP_PRESET_COLOR);
                     else optional = Optional.of(BODY_PLAN_TOOLTIP);
                 }
             }

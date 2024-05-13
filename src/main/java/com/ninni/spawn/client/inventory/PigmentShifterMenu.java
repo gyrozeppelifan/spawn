@@ -12,6 +12,7 @@ import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.TropicalFish;
+import net.minecraft.world.entity.animal.axolotl.Axolotl;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -171,8 +172,23 @@ public class PigmentShifterMenu extends AbstractContainerMenu {
                         resultCopy.getOrCreateTag().putInt("ItemVariantTag", clam.getPackedVariant());
                         clam.discard();
 
+                        this.outputContainer.setItem(4, resultCopy);
+                    } else if (bucketSlotItem.is(Items.AXOLOTL_BUCKET) && compoundTag.contains("Variant", 3)) {
+                        int variantId = bucketSlotItem.getTag().getInt("Variant");
+
+                        if (variantId != 4) {
+                            ((PigmentShifterSlot)this.bodyDyeSlot).setDisabled(true);
+                            ((PigmentShifterSlot)this.patternSlot).setDisabled(true);
+                            ((PigmentShifterSlot)this.patternDyeSlot).setDisabled(true);
+
+                            int shiftedId = variantId + 1;
+                            if (variantId == 3) shiftedId = 0;
+
+                            if (bodyPlanSlotItem.is(SpawnTags.CHANGES_BODY_PLAN)) resultCopy.getOrCreateTag().putInt("Variant", shiftedId);
+                            this.outputContainer.setItem(4, resultCopy);
+                        }
                     } else {
-                        ((PigmentShifterSlot)this.bodyDyeSlot).setDisabled(false);
+                        setAllSlotsDisabled(false);
 
                         if (bucketSlotItem.is(SpawnItems.SEAHORSE_BUCKET) && compoundTag.contains("BucketVariantTag", 3)) {
                             int tag = bucketSlotItem.getTag().getInt("BucketVariantTag");
@@ -210,8 +226,9 @@ public class PigmentShifterMenu extends AbstractContainerMenu {
                             resultCopy.getOrCreateTag().putInt("BucketVariantTag", ((TropicalFishAccessor) tropicalFish).callGetPackedVariant());
                             tropicalFish.discard();
                         }
+
+                        this.outputContainer.setItem(4, resultCopy);
                     }
-                    this.outputContainer.setItem(4, resultCopy);
                 } else {
                     setAllSlotsDisabled(false);
                     this.outputContainer.removeItemNoUpdate(4);
@@ -264,9 +281,9 @@ public class PigmentShifterMenu extends AbstractContainerMenu {
                     (((PigmentShifterSlot)this.patternDyeSlot).isDisabled() || !this.moveItemStackTo(itemStack2, this.patternDyeSlot.index, this.patternDyeSlot.index + 1, false))
 
                     : itemStack2.is(SpawnTags.CHANGES_BODY_PLAN) ?
-                    !this.moveItemStackTo(itemStack2, this.bodyPlanSlot.index, this.bodyPlanSlot.index + 1, false)
+                    (((PigmentShifterSlot)this.bodyPlanSlot).isDisabled() || !this.moveItemStackTo(itemStack2, this.bodyPlanSlot.index, this.bodyPlanSlot.index + 1, false))
                     : itemStack2.is(SpawnTags.CHANGES_PATTERN) ?
-                    !this.moveItemStackTo(itemStack2, this.patternSlot.index, this.patternSlot.index + 1, false)
+                    (((PigmentShifterSlot)this.patternSlot).isDisabled() || !this.moveItemStackTo(itemStack2, this.patternSlot.index, this.patternSlot.index + 1, false))
 
                     : itemStack2.is(SpawnTags.CUSTOMIZABLE_MOB_ITEMS) ?
                     !this.moveItemStackTo(itemStack2, this.bucketSlot.index, this.bucketSlot.index + 1, false) : i >= 4 && i < 31 ?

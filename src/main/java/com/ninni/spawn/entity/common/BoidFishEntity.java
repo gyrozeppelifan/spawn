@@ -26,7 +26,6 @@ public abstract class BoidFishEntity extends AbstractFish {
     public BoidFishEntity leader;
     public List<BoidFishEntity> ownSchool = new ArrayList<>();
     private int maxSchoolSize;
-    public int cantSwimTimer = 40;
     public int cantFollowTimer;
 
     public BoidFishEntity(EntityType<? extends AbstractFish> entityType, Level level) {
@@ -35,11 +34,11 @@ public abstract class BoidFishEntity extends AbstractFish {
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(4, new FishSwimGoal(this));
-        this.goalSelector.addGoal(5, new BoidFishSchoolingGoal(this, 0.2f, 0.4f, 8 / 20f, 1 / 20f));
-        this.goalSelector.addGoal(3, new HeightBoundsGoal(this));
-        this.goalSelector.addGoal(2, new LimitSpeedAndLookInVelocityDirectionGoal(this, 0.65f));
-        this.goalSelector.addGoal(5, new OrganizeBoidSchoolingGoal(this));
+        this.goalSelector.addGoal(0, new BoidFishSchoolingGoal(this, 0.2f, 0.4f, 8 / 20f, 1 / 20f));
+        this.goalSelector.addGoal(0, new HeightBoundsGoal(this));
+        this.goalSelector.addGoal(0, new LimitSpeedAndLookInVelocityDirectionGoal(this, 0.65f));
+        this.goalSelector.addGoal(0, new OrganizeBoidSchoolingGoal(this));
+        this.goalSelector.addGoal(6, new FishSwimGoal(this));
     }
 
     public int getMaxSchoolSize() {
@@ -74,7 +73,6 @@ public abstract class BoidFishEntity extends AbstractFish {
 
     private void addToOwnSchoolFollower(BoidFishEntity entity) {
         if (entity.cantFollowTimer == 0) this.ownSchool.add(entity);
-        if (entity.cantSwimTimer > 0) this.cantSwimTimer--;
     }
 
     private void removeFollowerFromOwnSchool(BoidFishEntity entity) {
@@ -110,13 +108,13 @@ public abstract class BoidFishEntity extends AbstractFish {
         private final BoidFishEntity fish;
 
         public FishSwimGoal(BoidFishEntity boidFish) {
-            super(boidFish, 1.0, 40);
+            super(boidFish, 1.0, 120);
             this.fish = boidFish;
         }
 
         @Override
         public boolean canUse() {
-            return !this.fish.isFollower() && !this.fish.hasFollowers() && fish.cantSwimTimer == 0 && super.canUse();
+            return !this.fish.isFollower() && !this.fish.hasFollowers() && super.canUse();
         }
     }
 }
