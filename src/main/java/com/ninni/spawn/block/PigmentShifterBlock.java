@@ -58,7 +58,10 @@ public class PigmentShifterBlock extends BaseEntityBlock implements SimpleWaterl
                 //player.awardStat(Stats.INTERACT_WITH_CRAFTING_TABLE);
                 return InteractionResult.CONSUME;
             }
-        } else return InteractionResult.SUCCESS;
+        } else {
+            player.displayClientMessage(Component.translatable("container.spawn.pigment_shifter.no_water"), true);
+            return InteractionResult.SUCCESS;
+        }
     }
 
     public MenuProvider getMenuProvider(BlockState blockState, Level level, BlockPos blockPos) {

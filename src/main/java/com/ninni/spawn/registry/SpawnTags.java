@@ -15,6 +15,8 @@ public interface SpawnTags {
 
     //Item tags
     TagKey<Item> CUSTOMIZABLE_MOB_ITEMS = TagKey.create(Registries.ITEM, new ResourceLocation(MOD_ID, "customizable_mob_items"));
+    TagKey<Item> CHANGES_BODY_PLAN = TagKey.create(Registries.ITEM, new ResourceLocation(MOD_ID, "changes_body_plan"));
+    TagKey<Item> CHANGES_PATTERN = TagKey.create(Registries.ITEM, new ResourceLocation(MOD_ID, "changes_pattern"));
     TagKey<Item> ANGLER_FISH_TEMPTS = TagKey.create(Registries.ITEM, new ResourceLocation(MOD_ID, "angler_fish_tempts"));
     TagKey<Item> ANGLER_FISH_LIKES = TagKey.create(Registries.ITEM, new ResourceLocation(MOD_ID, "angler_fish_likes"));
     TagKey<Item> TUNA_TEMPTS = TagKey.create(Registries.ITEM, new ResourceLocation(MOD_ID, "tuna_tempts"));

@@ -135,5 +135,9 @@ public class ClamVariant {
             this.id = j;
             this.name = name;
         }
+
+        public int getId() {
+            return id;
+        }
     }
 }
