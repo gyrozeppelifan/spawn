@@ -1,9 +1,8 @@
-package com.ninni.spawn.mixin.client;
+package com.ninni.spawn.mixin.tweaks.client;
 
 import com.ninni.spawn.SpawnRPTweaks;
 import net.minecraft.client.model.CodModel;
 import net.minecraft.client.model.HierarchicalModel;
-import net.minecraft.client.model.SalmonModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;

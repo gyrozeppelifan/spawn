@@ -1,4 +1,4 @@
-package com.ninni.spawn.mixin.client;
+package com.ninni.spawn.mixin.tweaks.client;
 
 import com.ninni.spawn.SpawnRPTweaks;
 import net.minecraft.client.model.ColorableHierarchicalModel;

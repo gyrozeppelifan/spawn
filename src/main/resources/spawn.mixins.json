@@ -4,6 +4,15 @@
   "package": "com.ninni.spawn.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "accessor.NoiseGeneratorSettingsAccessor",
+    "accessor.PlayerAccessor",
+    "accessor.TropicalFishAccessor",
+
+    "tweaks.CodMixin",
+    "tweaks.RabbitMixin",
+    "tweaks.SalmonMixin",
+    "tweaks.TropicalFishMixin",
+
     "AbstractFishMixin",
     "BlockEntityTypeMixin",
     "ChestBlockMixin",
@@ -15,25 +24,22 @@
     "OverworldBiomeBuilderMixin",
     "PlayerMixin",
     "PoseMixin",
-    "RabbitMixin",
-    "ServerPlayerMixin",
-    "accessor.NoiseGeneratorSettingsAccessor",
-    "accessor.PlayerAccessor",
-    "accessor.TropicalFishAccessor"
+    "ServerPlayerMixin"
   ],
   "client": [
+    "tweaks.client.BatRendererMixin",
+    "tweaks.client.CodModelMixin",
+    "tweaks.client.ParrotOnShoulderLayerMixin",
+    "tweaks.client.ParrotRendererMixin",
+    "tweaks.client.RabbitRendererMixin",
+    "tweaks.client.SalmonModelMixin",
+    "tweaks.client.TropicalFishModelAMixin",
+    "tweaks.client.TropicalFishModelBMixin",
+    "tweaks.client.TurtleModelMixin",
+
     "client.AxolotlModelMixin",
-    "client.BatRendererMixin",
-    "client.BlockEntityWithoutLevelRendererMixin",
-    "client.CodModelMixin",
-    "client.ParrotOnShoulderLayerMixin",
-    "client.ParrotRendererMixin",
     "client.PufferfishRendererMixin",
-    "client.RabbitRendererMixin",
-    "client.SalmonModelMixin",
-    "client.TropicalFishModelAMixin",
-    "client.TropicalFishModelBMixin",
-    "client.TurtleModelMixin"
+    "client.BlockEntityWithoutLevelRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

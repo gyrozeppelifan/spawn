@@ -18,16 +18,6 @@ public abstract class AbstractFishMixin extends WaterAnimal implements Bucketabl
         super(entityType, world);
     }
 
-
-    @Inject(method = "<init>", at = @At("TAIL"))
-    private void S$init(EntityType<? extends AbstractFish> entityType, Level level, CallbackInfo ci) {
-        AbstractFish that = AbstractFish.class.cast(this);
-        if ((that instanceof Cod) || (that instanceof Salmon) || (that instanceof TropicalFish)) {
-            this.moveControl = new SmoothSwimmingMoveControl(this, 85, 10, 0.02f, 0.1f, true);
-            this.lookControl = new SmoothSwimmingLookControl(this, 10);
-        }
-    }
-
     @Inject(method = "aiStep", at = @At("HEAD"), cancellable = true)
     private void S$aiStep(CallbackInfo ci) {
         AbstractFish that = AbstractFish.class.cast(this);

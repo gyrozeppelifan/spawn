@@ -1,13 +1,11 @@
-package com.ninni.spawn.mixin.client;
+package com.ninni.spawn.mixin.tweaks.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.ninni.spawn.SpawnRPTweaks;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.QuadrupedModel;
 import net.minecraft.client.model.TurtleModel;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.animal.Turtle;
 import org.spongepowered.asm.mixin.Final;

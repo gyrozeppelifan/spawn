@@ -1,4 +1,4 @@
-package com.ninni.spawn.mixin.client;
+package com.ninni.spawn.mixin.tweaks.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.ninni.spawn.SpawnRPTweaks;
@@ -6,7 +6,6 @@ import com.ninni.spawn.client.model.ParrotRemodel;
 import com.ninni.spawn.registry.SpawnEntityModelLayers;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ParrotModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.EntityModelSet;
@@ -14,7 +13,6 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.ParrotOnShoulderLayer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;

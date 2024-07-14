@@ -48,6 +48,8 @@ public class AnglerFish extends AbstractFish implements Bucketable, PathFindingF
 
     public AnglerFish(EntityType<? extends AnglerFish> type, Level world) {
         super(type, world);
+        this.moveControl = new SmoothSwimmingMoveControl(this, 85, 10, 0.02f, 0.1f, true);
+        this.lookControl = new SmoothSwimmingLookControl(this, 10);
     }
 
     public boolean isDeflated() {

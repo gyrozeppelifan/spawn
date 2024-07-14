@@ -1,21 +1,17 @@
-package com.ninni.spawn.mixin.client;
+package com.ninni.spawn.mixin.tweaks.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.ninni.spawn.SpawnRPTweaks;
 import com.ninni.spawn.client.model.BatRemodel;
-import com.ninni.spawn.client.model.RabbitRemodel;
 import com.ninni.spawn.registry.SpawnEntityModelLayers;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.model.BatModel;
-import net.minecraft.client.model.RabbitModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.BatRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.client.renderer.entity.RabbitRenderer;
 import net.minecraft.world.entity.ambient.Bat;
-import net.minecraft.world.entity.animal.Rabbit;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
