@@ -1,14 +1,19 @@
 package com.ninni.spawn.registry;
 
+import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.Music;
+import net.minecraft.sounds.Musics;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.level.block.SoundType;
 
 import static com.ninni.spawn.Spawn.MOD_ID;
 
 public interface SpawnSoundEvents {
+
 
     SoundEvent FISH_FLOP = register("entity.fish.flop");
     SoundEvent FISH_SWIM = register("entity.fish.swim");
@@ -75,7 +80,7 @@ public interface SpawnSoundEvents {
     SoundEvent ROTTEN_WOOD_TRAPDOOR_OPEN = register("block.rotten_wood_trapdoor.open");
     SoundEvent ROTTEN_WOOD_TRAPDOOR_CLOSE = register("block.rotten_wood_trapdoor.close");
 
-
+    Holder.Reference<SoundEvent> MUSIC_SEAGRASS_MEADOWS = registerForHolder("music.seagrass_meadows");
     SoundEvent MUSIC_DISC_BLINK = register("music_disc.blink");
 
     SoundEvent GOAT_HORN_OCTOPUS = register("item.goat_horn.octopus");
@@ -86,6 +91,8 @@ public interface SpawnSoundEvents {
     SoundType FALLEN_LEAVES = register("fallen_leaves", 1, 1);
     SoundType SNAIL_SHELL = register("snail_shell", 1, 1);
 
+    Music SEAGRASS_MEADOWS = Musics.createGameMusic(MUSIC_SEAGRASS_MEADOWS);
+
     private static SoundType register(String name, float volume, float pitch) {
         return new SoundType(volume, pitch, register("block." + name + ".break"), register("block." + name + ".step"), register("block." + name + ".place"), register("block." + name + ".hit"), register("block." + name + ".fall"));
     }
@@ -94,4 +101,10 @@ public interface SpawnSoundEvents {
         ResourceLocation id = new ResourceLocation(MOD_ID, name);
         return Registry.register(BuiltInRegistries.SOUND_EVENT, id, SoundEvent.createVariableRangeEvent(id));
     }
+
+    private static Holder.Reference<SoundEvent> registerForHolder(String name) {
+        ResourceLocation id = new ResourceLocation(MOD_ID, name);
+        return Registry.registerForHolder(BuiltInRegistries.SOUND_EVENT, id, SoundEvent.createVariableRangeEvent(id));
+    }
+
 }

@@ -649,6 +649,25 @@
 			}
 		]
 	},
+	"music.seagrass_meadows": {
+		"sounds": [
+			{
+				"name": "spawn:music/game/water/cromatic",
+				"stream": true,
+				"volume": 0.4
+			},
+			{
+				"name": "music/game/water/axolotl",
+				"stream": true,
+				"volume": 0.4
+			},
+			{
+				"name": "music/game/water/dragon_fish",
+				"stream": true,
+				"volume": 0.4
+			}
+		]
+	},
 	"item.goat_horn.octopus": {
 		"sounds": [
 			"spawn:item/goat_horn/octopus1",
