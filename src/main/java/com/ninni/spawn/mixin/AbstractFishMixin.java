@@ -1,12 +1,11 @@
 package com.ninni.spawn.mixin;
 
 import com.ninni.spawn.entity.common.FlopConditionable;
+import com.ninni.spawn.registry.SpawnTags;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.control.SmoothSwimmingLookControl;
 import net.minecraft.world.entity.ai.control.SmoothSwimmingMoveControl;
-import net.minecraft.world.entity.animal.AbstractFish;
-import net.minecraft.world.entity.animal.Bucketable;
-import net.minecraft.world.entity.animal.WaterAnimal;
+import net.minecraft.world.entity.animal.*;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -22,8 +21,11 @@ public abstract class AbstractFishMixin extends WaterAnimal implements Bucketabl
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void S$init(EntityType<? extends AbstractFish> entityType, Level level, CallbackInfo ci) {
-        this.moveControl = new SmoothSwimmingMoveControl(this, 85, 10, 0.02f, 0.1f, true);
-        this.lookControl = new SmoothSwimmingLookControl(this, 10);
+        AbstractFish that = AbstractFish.class.cast(this);
+        if ((that instanceof Cod) || (that instanceof Salmon) || (that instanceof TropicalFish)) {
+            this.moveControl = new SmoothSwimmingMoveControl(this, 85, 10, 0.02f, 0.1f, true);
+            this.lookControl = new SmoothSwimmingLookControl(this, 10);
+        }
     }
 
     @Inject(method = "aiStep", at = @At("HEAD"), cancellable = true)
