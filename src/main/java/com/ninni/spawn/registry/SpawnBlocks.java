@@ -70,6 +70,9 @@ public class SpawnBlocks {
     public static final Block WHALE_FLESH = register("whale_flesh", new WhaleFleshBlock(FabricBlockSettings.create().mapColor(MapColor.COLOR_PURPLE).sounds(SoundType.SLIME_BLOCK).strength(-1.0F, 3600000.0F).noLootTable().isValidSpawn(Blocks::never)));
     public static final Block WHALE_UVULA = register("whale_uvula", new WhaleUvulaBlock(FabricBlockSettings.copyOf(WHALE_FLESH).lightLevel((blockStatex) -> 15)));
 
+    // chameleon
+    public static final Block CHAMELEON_SHED_BLOCK = register("chameleon_shed_block", new ChameleonShedBlock(FabricBlockSettings.create()));
+
 
     private static Block register(String id, Block block) {
         return Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(Spawn.MOD_ID, id), block);

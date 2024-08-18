@@ -1,6 +1,7 @@
 package com.ninni.spawn.registry;
 
 import com.google.common.reflect.Reflection;
+import com.ninni.spawn.block.entity.ChameleonShedBlockEntity;
 import com.ninni.spawn.client.inventory.PigmentShifterScreen;
 import com.ninni.spawn.client.inventory.HamsterInventoryMenu;
 import com.ninni.spawn.client.inventory.HamsterInventoryScreen;
@@ -13,6 +14,7 @@ import com.ninni.spawn.client.renderer.block.WhaleUvulaRenderer;
 import com.ninni.spawn.client.renderer.entity.*;
 import com.ninni.spawn.entity.*;
 import com.ninni.spawn.entity.variant.ClamVariant;
+import com.ninni.spawn.item.ChameleonShedBlockItem;
 import com.ninni.spawn.item.ClamCaseItem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -84,6 +86,7 @@ public class SpawnVanillaIntegration {
     }
 
     private static void registerFlammables() {
+
         FlammableBlockRegistry defaultInstance = FlammableBlockRegistry.getDefaultInstance();
         defaultInstance.add(SpawnBlocks.FALLEN_LEAVES, 60, 100);
         defaultInstance.add(SpawnBlocks.SUNFLOWER, 60, 100);
@@ -121,6 +124,7 @@ public class SpawnVanillaIntegration {
             registerParticles();
             registerBlockRenderLayers();
             registerScreens();
+            registerBlockTints();
             registerItemModelPredicates();
         }
 
@@ -203,7 +207,21 @@ public class SpawnVanillaIntegration {
 
             ItemProperties.register(SpawnItems.CAPTURED_OCTOPUS, new ResourceLocation("tooting"), (itemStack, clientLevel, livingEntity, i) -> livingEntity != null && livingEntity.isUsingItem() && livingEntity.getUseItem() == itemStack ? 1.0f : 0.0f);
 
-            ColorProviderRegistry.ITEM.register((itemStack, i) -> i > 0 ? -1 : ((DyeableLeatherItem) itemStack.getItem()).getColor(itemStack), SpawnItems.CLAM_CASE);
+            ColorProviderRegistry.ITEM.register((itemStack, i) -> i > 0 ? -1 : ((ClamCaseItem) itemStack.getItem()).getColor(itemStack), SpawnItems.CLAM_CASE);
+
+            ColorProviderRegistry.ITEM.register((itemStack, i) -> ((ChameleonShedBlockItem) itemStack.getItem()).getColor(itemStack), SpawnItems.CHAMELEON_SHED_BLOCK);
+
+        }
+
+        private static void registerBlockTints() {
+            ColorProviderRegistry.BLOCK.register((blockState, blockAndTintGetter, blockPos, i) -> {
+                        if (blockAndTintGetter.getBlockEntity(blockPos) instanceof ChameleonShedBlockEntity blockEntity) {
+                            return blockEntity.getColor();
+                        }
+                        return 0xFFFFFF;
+                    },
+                    SpawnBlocks.CHAMELEON_SHED_BLOCK
+            );
         }
 
         private static void registerModelLayers() {

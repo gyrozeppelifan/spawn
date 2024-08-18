@@ -131,6 +131,9 @@ public class SpawnItems {
     public static final Item KRILL_SWARM_SPAWN_EGG = register("krill_swarm_spawn_egg", new SpawnEggItem(SpawnEntityType.SpawnAquaticCreature.KRILL_SWARM, 0xEE7F4F, 0xFFBCA0, new Item.Properties()));
     public static final Item KRILL_SWARM_BUCKET = register("krill_swarm_bucket", new MobBucketItem(SpawnEntityType.SpawnAquaticCreature.KRILL_SWARM, Fluids.WATER, SoundEvents.BUCKET_EMPTY_FISH, new Item.Properties().stacksTo(1)));
 
+    // chameleon
+    public static final Item CHAMELEON_SHED = register("chameleon_shed", new Item(new FabricItemSettings()));
+    public static final Item CHAMELEON_SHED_BLOCK = register("chameleon_shed_block", new ChameleonShedBlockItem(SpawnBlocks.CHAMELEON_SHED_BLOCK, new FabricItemSettings()));
 
     private static Item register(String id, Item item) {
         return Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(Spawn.MOD_ID, id), item);

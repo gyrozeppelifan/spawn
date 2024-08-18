@@ -27,11 +27,11 @@ public abstract class MinecraftMixin {
     @Inject(method = "getSituationalMusic", at = @At("HEAD"), cancellable = true)
     public void S$getSituationalMusic(CallbackInfoReturnable<Music> cir) {
         Music music = Optionull.map(this.screen, Screen::getBackgroundMusic);
-        Holder<Biome> holder = this.player.level().getBiome(this.player.blockPosition());
 
         if (music != null) cir.setReturnValue(music);
 
         if (this.player != null) {
+            Holder<Biome> holder = this.player.level().getBiome(this.player.blockPosition());
             if (this.getMusicManager().isPlayingMusic(SpawnSoundEvents.SEAGRASS_MEADOWS) || this.player.isUnderWater() && holder.is(SpawnBiomes.SEAGRASS_MEADOW)) {
                 cir.setReturnValue(SpawnSoundEvents.SEAGRASS_MEADOWS);
             }

@@ -50,4 +50,12 @@ public class SpawnBlockEntityTypes {
                     SpawnBlocks.CLAM_LAUNCHER
             ).build(null)
     );
+
+    public static final BlockEntityType<ChameleonShedBlockEntity> CHAMELEON_SHED_BLOCK = Registry.register(
+            BuiltInRegistries.BLOCK_ENTITY_TYPE,
+            new ResourceLocation(Spawn.MOD_ID, "chameleon_shed_block"),
+            BlockEntityType.Builder.of(ChameleonShedBlockEntity::new,
+                    SpawnBlocks.CHAMELEON_SHED_BLOCK
+            ).build(null)
+    );
 }
