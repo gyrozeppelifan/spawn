@@ -1,6 +1,6 @@
 {
 	"parent": "spawn:block/template_chameleon_cube_all",
 	"textures": {
-		"all": "spawn:block/chameleon_shed_block"
+		"all": "spawn:block/chameleon_shed_plates"
 	}
 }

@@ -89,11 +89,11 @@ public class HerringModel<T extends Entity> extends HierarchicalModel<T> {
 
 
 
-        this.root.y = Mth.cos(animationProgress + 3) * 0.4F * 0.25F;
-        this.root.yRot = Mth.cos(animationProgress + 1) * 0.4F * 0.25F;
-        this.tail.yRot = Mth.cos(animationProgress + 2) * 2.8F * 0.25F;
-        this.rightFin.zRot = Mth.cos(animationProgress + 1f + pi) * 2 * 0.25F + 0.6F;
-        this.leftFin.zRot = Mth.cos(animationProgress + 1.5f) * 2F * 0.25F - 0.6F;
+        this.root.y = Mth.cos(animationProgress * 0.5f + 3) * 0.4F * 0.25F;
+        this.root.yRot = Mth.cos(animationProgress * 0.5f + 1) * 0.4F * 0.25F;
+        this.tail.yRot = Mth.cos(animationProgress * 0.5f + 2) * 2.8F * 0.25F;
+        this.rightFin.zRot = Mth.cos(animationProgress * 0.5f + 1f + pi) * 2 * 0.25F + 0.6F;
+        this.leftFin.zRot = Mth.cos(animationProgress * 0.5f + 1.5f) * 2F * 0.25F - 0.6F;
     }
 }
 

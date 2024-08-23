@@ -55,7 +55,9 @@ public class SpawnBlockEntityTypes {
             BuiltInRegistries.BLOCK_ENTITY_TYPE,
             new ResourceLocation(Spawn.MOD_ID, "chameleon_shed_block"),
             BlockEntityType.Builder.of(ChameleonShedBlockEntity::new,
-                    SpawnBlocks.CHAMELEON_SHED_BLOCK
+                    SpawnBlocks.CHAMELEON_SHED_BLOCK,
+                    SpawnBlocks.CHAMELEON_SHED_PLATES,
+                    SpawnBlocks.CHAMELEON_SHED_SCALES
             ).build(null)
     );
 }

@@ -71,7 +71,9 @@ public class SpawnBlocks {
     public static final Block WHALE_UVULA = register("whale_uvula", new WhaleUvulaBlock(FabricBlockSettings.copyOf(WHALE_FLESH).lightLevel((blockStatex) -> 15)));
 
     // chameleon
-    public static final Block CHAMELEON_SHED_BLOCK = register("chameleon_shed_block", new ChameleonShedBlock(FabricBlockSettings.create()));
+    public static final Block CHAMELEON_SHED_BLOCK = register("chameleon_shed_block", new ChameleonShedBlock(FabricBlockSettings.create().strength(0.1f).sound(SoundType.MOSS)));
+    public static final Block CHAMELEON_SHED_PLATES = register("chameleon_shed_plates", new ChameleonShedBlock(FabricBlockSettings.create().strength(0.2f).sound(SoundType.MOSS)));
+    public static final Block CHAMELEON_SHED_SCALES = register("chameleon_shed_scales", new ChameleonShedBlock(FabricBlockSettings.create().strength(0.2f).sound(SoundType.MOSS)));
 
 
     private static Block register(String id, Block block) {

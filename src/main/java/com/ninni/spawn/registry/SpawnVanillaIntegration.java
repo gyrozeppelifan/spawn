@@ -209,7 +209,11 @@ public class SpawnVanillaIntegration {
 
             ColorProviderRegistry.ITEM.register((itemStack, i) -> i > 0 ? -1 : ((ClamCaseItem) itemStack.getItem()).getColor(itemStack), SpawnItems.CLAM_CASE);
 
-            ColorProviderRegistry.ITEM.register((itemStack, i) -> ((ChameleonShedBlockItem) itemStack.getItem()).getColor(itemStack), SpawnItems.CHAMELEON_SHED_BLOCK);
+            ColorProviderRegistry.ITEM.register((itemStack, i) -> ((ChameleonShedBlockItem) itemStack.getItem()).getColor(itemStack),
+                    SpawnItems.CHAMELEON_SHED_BLOCK,
+                    SpawnItems.CHAMELEON_SHED_PLATES,
+                    SpawnItems.CHAMELEON_SHED_SCALES
+            );
 
         }
 
@@ -220,7 +224,9 @@ public class SpawnVanillaIntegration {
                         }
                         return 0xFFFFFF;
                     },
-                    SpawnBlocks.CHAMELEON_SHED_BLOCK
+                    SpawnBlocks.CHAMELEON_SHED_BLOCK,
+                    SpawnBlocks.CHAMELEON_SHED_PLATES,
+                    SpawnBlocks.CHAMELEON_SHED_SCALES
             );
         }
 

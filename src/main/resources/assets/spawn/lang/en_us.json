@@ -216,5 +216,11 @@
   "item.spawn.sunfish_spawn_egg": "Sunfish Spawn Egg",
   "item.spawn.baby_sunfish_bucket": "Bucket of Baby Sunfish",
   "advancements.spawn.breed_sunfish.title": "Baby Boom!",
-  "advancements.spawn.breed_sunfish.description": "Breed two Sunfish together"
+  "advancements.spawn.breed_sunfish.description": "Breed two Sunfish together",
+
+  "item.spawn.chameleon_shed": "Chameleon Shed",
+  "item.spawn.chameleon_shed.color": "Color: ",
+  "block.spawn.chameleon_shed_block": "Chameleon Shed Block",
+  "block.spawn.chameleon_shed_plates": "Chameleon Shed Plates",
+  "block.spawn.chameleon_shed_scales": "Chameleon Shed Scales"
 }

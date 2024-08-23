@@ -134,6 +134,8 @@ public class SpawnItems {
     // chameleon
     public static final Item CHAMELEON_SHED = register("chameleon_shed", new Item(new FabricItemSettings()));
     public static final Item CHAMELEON_SHED_BLOCK = register("chameleon_shed_block", new ChameleonShedBlockItem(SpawnBlocks.CHAMELEON_SHED_BLOCK, new FabricItemSettings()));
+    public static final Item CHAMELEON_SHED_PLATES = register("chameleon_shed_plates", new ChameleonShedBlockItem(SpawnBlocks.CHAMELEON_SHED_PLATES, new FabricItemSettings()));
+    public static final Item CHAMELEON_SHED_SCALES = register("chameleon_shed_scales", new ChameleonShedBlockItem(SpawnBlocks.CHAMELEON_SHED_SCALES, new FabricItemSettings()));
 
     private static Item register(String id, Item item) {
         return Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(Spawn.MOD_ID, id), item);
